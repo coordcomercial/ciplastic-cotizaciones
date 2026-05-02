@@ -3,642 +3,422 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>CIPlastic Cotizaciones</title>
+<title>CIPlastic — Generador de Cotizaciones</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{--nv:#1a3a6b;--nv2:#12294d;--tl:#2bbfd4;--tl2:#1a8fa0;--gr:#e8edf4;--gr2:#f4f7fb;--tx:#2d3748;--lt:#718096;}
-body{font-family:Arial,'Helvetica Neue',sans-serif;background:var(--gr);color:var(--tx);font-size:13px;}
-.wrap{max-width:980px;margin:0 auto;padding:16px;}
-.appbar{background:linear-gradient(135deg,var(--nv),#2a4d9a);color:#fff;padding:13px 20px;border-radius:10px;margin-bottom:16px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 18px rgba(26,58,107,.28);}
-.appbar img{height:44px;filter:brightness(0)invert(1);}
-.appbar h1{font-size:16px;font-weight:700;}
-.appbar p{font-size:10px;opacity:.6;margin-top:1px;}
-.lang-sw{display:flex;gap:6px;margin-left:auto;}
-.lbtn{padding:5px 14px;border-radius:20px;border:1.5px solid rgba(255,255,255,.4);background:transparent;color:rgba(255,255,255,.7);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;}
-.lbtn.active{background:rgba(255,255,255,.2);color:#fff;border-color:#fff;}
-.tabs{display:flex;background:#fff;border-radius:8px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;}
-.tab{flex:1;padding:11px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;color:var(--lt);border-bottom:3px solid transparent;transition:all .2s;}
-.tab.active{color:var(--nv);border-bottom-color:var(--tl);}
-.tab:hover:not(.active){color:var(--nv);background:var(--gr2);}
-.tc{display:none;}.tc.active{display:block;}
-.card{background:#fff;border-radius:10px;padding:18px;margin-bottom:13px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.ctitle{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--tl);margin-bottom:13px;padding-bottom:7px;border-bottom:1px solid var(--gr);}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
-.frow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px;}
-.fg{display:flex;flex-direction:column;gap:4px;margin-bottom:9px;}
-.fg label{font-size:10px;font-weight:800;color:var(--lt);text-transform:uppercase;letter-spacing:.5px;}
-.fg input,.fg select,.fg textarea{border:1.5px solid var(--gr);border-radius:6px;padding:7px 10px;font-size:12px;color:var(--tx);font-family:inherit;transition:border-color .2s;}
-.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--tl);box-shadow:0 0 0 3px rgba(43,191,212,.1);}
-.fg textarea{resize:vertical;min-height:52px;}
-.oc{border:1.5px solid var(--gr);border-radius:8px;padding:15px;margin-bottom:11px;}
-.onr{display:inline-block;background:var(--nv);color:#fff;font-size:10px;font-weight:800;padding:2px 9px;border-radius:4px;margin-bottom:10px;}
-.tgl{display:flex;background:var(--gr2);border-radius:6px;padding:3px;margin-bottom:12px;width:fit-content;}
-.tbtn{padding:5px 13px;border-radius:4px;border:none;cursor:pointer;font-size:11px;font-weight:700;background:transparent;color:var(--lt);transition:all .15s;}
-.tbtn.active{background:#fff;color:var(--nv);box-shadow:0 1px 4px rgba(0,0,0,.13);}
-.pbadge{background:linear-gradient(135deg,var(--nv),#2a4d9a);color:#fff;border-radius:8px;padding:12px;}
-.pbadge-prices{margin-top:8px;display:flex;align-items:baseline;gap:10px;}
-.pbadge-before{font-size:11px;text-decoration:line-through;opacity:.5;}
-.pbadge-now{font-size:20px;font-weight:700;color:#7dd8e8;}
-.pbadge-valid{font-size:10px;opacity:.6;margin-top:2px;}
-.pbadge-bonos{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;}
-.bono-pill{background:rgba(43,191,212,.25);color:#7dd8e8;border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700;}
-.calcbox{background:var(--gr2);border:1px solid var(--gr);border-radius:6px;padding:7px 11px;margin-top:7px;font-size:12px;color:var(--lt);}
-.calcbox strong{color:var(--nv);font-size:14px;}
-.er{display:flex;align-items:flex-start;padding:9px 0 5px;border-bottom:1px solid var(--gr);gap:9px;}
-.er-wrap{border-bottom:1px solid var(--gr);margin-bottom:2px;}
-.er-wrap:last-child{border-bottom:none;}
-.er-wrap .er{border-bottom:none;margin-bottom:0;}
-.einfo{flex:1;}
-.ename{font-size:12px;font-weight:700;}
-.edesc{font-size:10px;color:var(--lt);margin-top:2px;}
-.epright{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
-.eprice{font-size:11px;font-weight:800;color:var(--tl);}
-.spt{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--lt);cursor:pointer;}
-.spt input{accent-color:var(--nv);width:12px;height:12px;}
-.rec-opts{background:var(--gr2);border-radius:6px;padding:10px 12px;margin:4px 0 8px 26px;display:none;}
-.rec-opts.show{display:block;}
-.rec-chk{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--nv);cursor:pointer;margin-top:6px;}
-.rec-chk input{accent-color:var(--nv);width:14px;height:14px;}
-.rec-price-tag{display:inline-block;background:var(--nv);color:#fff;border-radius:5px;padding:3px 10px;font-size:12px;font-weight:700;margin-top:7px;}
-.btn{padding:7px 14px;border-radius:6px;border:none;cursor:pointer;font-weight:700;font-size:11px;transition:all .15s;}
-.btn-nv{background:var(--nv);color:#fff;}.btn-nv:hover{background:var(--nv2);}
-.btn-tl{background:var(--tl);color:#fff;}.btn-tl:hover{background:var(--tl2);}
-.btn-out{background:transparent;border:1.5px solid var(--gr);color:var(--tx);}.btn-out:hover{border-color:var(--nv);color:var(--nv);}
-.btn-del{background:#fff0f0;color:#c53030;border:1px solid #fecaca;}.btn-del:hover{background:#fecaca;}
-.btn-sm{padding:4px 8px;font-size:10px;}
-.btn-lg{width:100%;padding:13px;font-size:13px;border-radius:8px;letter-spacing:.2px;}
-.addbtn{width:100%;padding:11px;border:2px dashed var(--gr);border-radius:8px;background:transparent;color:var(--lt);cursor:pointer;font-size:11px;font-weight:700;transition:all .2s;margin-bottom:13px;}
-.addbtn:hover{border-color:var(--tl);color:var(--tl);}
-.totalcard{background:linear-gradient(135deg,var(--nv),#2a4d9a);color:#fff;border-radius:10px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;margin-top:5px;}
-.tlabel{font-size:11px;opacity:.75;}
-.tamount{font-size:25px;font-weight:700;}
-.pmcard{border:1.5px solid var(--gr);border-radius:8px;padding:13px;margin-bottom:10px;}
-.pmname{font-weight:700;font-size:13px;color:var(--nv);}
-.pmsub{font-size:11px;color:var(--lt);margin-top:2px;}
-.toast{position:fixed;bottom:18px;right:18px;color:#fff;padding:10px 16px;border-radius:8px;font-size:12px;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.2);z-index:999;display:none;}
-.info-box{background:#e8f4fd;border:1.5px solid #90cdf4;border-radius:8px;padding:12px 14px;margin-top:13px;font-size:11px;color:#2b6cb0;line-height:1.6;}
-.tag-mayo{display:inline-block;background:linear-gradient(135deg,var(--tl),var(--nv));color:#fff;border-radius:10px;padding:1px 7px;font-size:9px;font-weight:800;margin-left:6px;vertical-align:middle;}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--nv:#1a3a6b;--tl:#2bbfd4;--gr:#f4f7fb;--bd:#e2e8f0;--tx:#1a202c;--lt:#718096}
+body{font-family:Arial,sans-serif;background:var(--gr);color:var(--tx);font-size:13px}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+.bar{background:linear-gradient(135deg,var(--nv),#2a4d9a);color:#fff;padding:12px 18px;border-radius:10px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:0 4px 18px rgba(26,58,107,.25)}
+.bar img{height:44px;filter:brightness(0)invert(1)}
+.bar h1{font-size:15px;font-weight:700}
+.bar p{font-size:10px;opacity:.6;margin-top:1px}
+.lsw{margin-left:auto;display:flex;gap:5px}
+.lb{padding:4px 12px;border-radius:20px;background:transparent;border:1.5px solid rgba(255,255,255,.4);color:rgba(255,255,255,.7);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s}
+.lb.on{background:rgba(255,255,255,.2);color:#fff;border-color:#fff}
+.tabs{display:flex;background:#fff;border-radius:8px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden}
+.tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;color:var(--lt);border-bottom:3px solid transparent;transition:all .2s}
+.tab.on{color:var(--nv);border-bottom-color:var(--tl)}
+.card{background:#fff;border-radius:10px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.ct{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--tl);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--bd)}
+.fg{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
+.fg label{font-size:10px;font-weight:700;color:var(--lt);text-transform:uppercase;letter-spacing:.5px}
+.fg input,.fg select,.fg textarea{border:1.5px solid var(--bd);border-radius:6px;padding:7px 10px;font-size:12px;color:var(--tx);font-family:inherit;transition:border-color .2s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--tl);box-shadow:0 0 0 3px rgba(43,191,212,.1)}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.oc{border:1.5px solid var(--bd);border-radius:8px;padding:13px;margin-bottom:10px}
+.bdg{background:linear-gradient(135deg,var(--nv),#2a4d9a);color:#fff;border-radius:8px;padding:11px;margin-top:6px}
+.bp{background:rgba(43,191,212,.25);color:#7dd8e8;border-radius:20px;padding:2px 8px;font-size:10px;display:inline-block;margin:2px 2px 0 0}
+.tgl{display:flex;background:var(--gr);border-radius:6px;padding:2px;width:fit-content;margin-bottom:10px}
+.tb{padding:5px 12px;border-radius:4px;border:none;cursor:pointer;font-size:11px;font-weight:700;background:transparent;color:var(--lt);transition:all .15s}
+.tb.on{background:#fff;color:var(--nv);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.er{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid var(--bd)}
+.er:last-child{border-bottom:none}
+.rp{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.rb{background:var(--gr);border-radius:7px;padding:10px;margin:3px 0 5px 24px;display:none}
+.rb.on{display:block}
+.totb{background:linear-gradient(135deg,var(--nv),#2a4d9a);color:#fff;border-radius:10px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px}
+.cbox{background:var(--gr);border-radius:6px;padding:6px 10px;margin-top:5px;font-size:11px;color:var(--lt)}
+.addb{width:100%;padding:10px;border:2px dashed var(--bd);border-radius:8px;background:transparent;color:var(--lt);cursor:pointer;font-size:11px;font-weight:700;transition:all .2s;margin-bottom:10px}
+.addb:hover{border-color:var(--tl);color:var(--tl)}
+.pm{border:1.5px solid var(--bd);border-radius:8px;padding:12px;margin-bottom:9px}
+.tag{background:var(--nv);color:#fff;border-radius:10px;padding:1px 7px;font-size:9px;font-weight:700;margin-left:5px;vertical-align:middle}
+.bpdf{width:100%;padding:13px;background:var(--tl);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px;transition:all .15s}
+.bpdf:hover{background:#1a8fa0}
+.bnv{width:100%;padding:13px;background:var(--nv);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.bnv:hover{background:#12294d}
+.bsm{border:1.5px solid var(--bd);background:transparent;padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px;color:var(--tx)}
+.bdel{background:#fff0f0;color:#c53030;border:1px solid #fecaca;padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px}
+input[type=checkbox]{accent-color:var(--nv);width:15px;height:15px;cursor:pointer;flex-shrink:0}
+
+/* ===== PRINT ===== */
+@media print{
+  body,html{background:#fff!important}
+  .no-print{display:none!important}
+  #printArea{display:block!important}
+  @page{margin:0;size:letter portrait}
+  .pp{page-break-after:always}
+  .pp:last-child{page-break-after:auto}
+}
+#printArea{display:none}
+.pp{background:#fff;width:8.5in;min-height:11in;padding:.45in .6in;display:flex;flex-direction:column;font-family:Arial,sans-serif;font-size:10.5pt;color:#1a1a2e;box-sizing:border-box}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.phr-contact{text-align:right;font-size:8.5pt;line-height:2;color:#333}
+.pdivider{border:none;border-top:2px solid #1a3a6b;margin:0 0 14px}
+.pbody{flex:1}
+.pyhl{background:#fff8d0;padding:1px 5px;font-weight:bold;font-size:11pt}
+.pibox{border-left:3px solid #1a3a6b;background:#f8f9fa;padding:8px 12px;margin:12px 0;font-size:9pt}
+.pzti{color:#1a3a6b;font-weight:bold;font-style:italic;text-decoration:underline;font-size:9.5pt;margin:13px 0 5px}
+.pftr{position:relative;height:88px;margin-top:auto}
+.pftr svg{position:absolute;top:0;left:0;width:100%;height:100%}
+.pftr-in{position:absolute;bottom:10px;left:18px;right:16px;display:flex;justify-content:space-between;align-items:flex-end}
+.pte{color:#fff;font-family:Georgia,serif;font-style:italic;font-size:14pt;line-height:1.2}
+.pcerts{display:flex;gap:13px;align-items:flex-end}
+.pcerts span{color:rgba(255,255,255,.65);font-size:6.5pt;font-weight:bold;text-align:center;max-width:50px;line-height:1.3}
 </style>
 </head>
 <body>
-<div class="wrap">
-<div class="appbar">
-  <img src="https://ciplastic.com/wp-content/uploads/2025/04/cropped-Logo_Footer-1.png-1.webp" alt="" onerror="this.style.display='none'">
-  <div><h1 id="at"></h1><p>CIPlastic · Certified Plastic Surgery · Tijuana, México</p></div>
-  <div class="lang-sw">
-    <button class="lbtn active" onclick="setLang('es')">ES</button>
-    <button class="lbtn" onclick="setLang('en')">EN</button>
+
+<!-- ===== APP UI ===== -->
+<div class="wrap no-print">
+<div class="bar">
+  <img src="https://ciplastic.com/wp-content/uploads/2025/04/cropped-Logo_Footer-1.png-1.webp" onerror="this.style.display='none'">
+  <div><h1 id="h1t"></h1><p>CIPlastic · Certified Plastic Surgery · Tijuana, México</p></div>
+  <div class="lsw">
+    <button class="lb on" onclick="sL('es')">ES</button>
+    <button class="lb" onclick="sL('en')">EN</button>
   </div>
 </div>
 <div class="tabs">
-  <div class="tab active" id="tab-cot" onclick="sw('cot')">📋 <span id="tt-cot"></span></div>
-  <div class="tab" id="tab-pro" onclick="sw('pro')">🏷️ <span id="tt-pro"></span></div>
+  <div class="tab on" id="t0" onclick="sw(0)">📋 <span id="ts0"></span></div>
+  <div class="tab" id="t1" onclick="sw(1)">🏷️ <span id="ts1"></span></div>
 </div>
 
-<div class="tc active" id="tc-cot">
-  <div class="card">
-    <div class="ctitle" id="lbl-patient-sec"></div>
-    <div class="frow">
-      <div class="fg"><label id="lbl-pname"></label><input id="pname" oninput="calc()"></div>
-      <div class="fg"><label id="lbl-pdate"></label><input type="date" id="pdate" oninput="calc()"></div>
+<!-- SECTION 0 -->
+<div id="s0">
+  <div class="card"><div class="ct" id="lp"></div>
+    <div class="r2">
+      <div class="fg"><label id="lpn"></label><input id="pn" oninput="calc()"></div>
+      <div class="fg"><label id="lpd"></label><input type="date" id="pd"></div>
     </div>
   </div>
-  <div class="card">
-    <div class="ctitle" id="lbl-opts-sec"></div>
-    <div id="ocont"></div>
-    <button class="addbtn" id="btn-addop" onclick="addOp()"></button>
+  <div class="card"><div class="ct" id="lo"></div><div id="oc"></div><button class="addb" id="badd" onclick="addOp()"></button></div>
+  <div class="card"><div class="ct" id="lex"></div><div id="ec"></div></div>
+  <div class="card"><div class="ct" id="lno"></div>
+    <div class="fg"><label id="lnol"></label><textarea id="notes" rows="2"></textarea></div>
   </div>
-  <div class="card">
-    <div class="ctitle" id="lbl-ex-sec"></div>
-    <div id="excont"></div>
+  <div class="totb">
+    <div><div style="font-size:11px;opacity:.7" id="lt"></div><div style="font-size:9px;opacity:.4;margin-top:1px" id="lts"></div></div>
+    <div id="td" style="font-size:22px;font-weight:700">$0 USD</div>
   </div>
-  <div class="card">
-    <div class="ctitle" id="lbl-notes-sec"></div>
-    <div class="fg"><label id="lbl-notes"></label><textarea id="notes" rows="2"></textarea></div>
-  </div>
-  <div class="totalcard">
-    <div><div class="tlabel" id="lbl-total"></div><div style="font-size:9px;opacity:.45;margin-top:1px" id="lbl-total-sub"></div></div>
-    <div class="tamount" id="tdisplay">$0 USD</div>
-  </div>
-  <button class="btn btn-tl btn-lg" style="margin-top:13px" id="btn-create" onclick="createGDoc()"></button>
-  <div class="info-box" id="infoBox" style="display:none"></div>
+  <button class="bpdf" id="bpdf" onclick="genPDF()"></button>
 </div>
 
-<div class="tc" id="tc-pro">
-  <div class="card">
-    <div class="ctitle" id="lbl-promos-sec"></div>
-    <div id="plist"></div>
-    <button class="btn btn-nv" style="margin-top:11px" id="btn-newpromo" onclick="openPromoForm()"></button>
+<!-- SECTION 1 -->
+<div id="s1" style="display:none">
+  <div class="card"><div class="ct" id="lpr"></div><div id="pl"></div>
+    <button id="bnp" onclick="openPF()" style="margin-top:9px;background:var(--nv);color:#fff;border:none;padding:8px 14px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700"></button>
   </div>
-  <div id="pform"></div>
+  <div id="pf"></div>
 </div>
 </div>
-<div class="toast" id="toast"></div>
+
+<!-- ===== PRINT AREA ===== -->
+<div id="printArea"></div>
 
 <script>
-const T={
-  es:{
-    appTitle:'Generador de Cotizaciones',tabCot:'Nueva Cotización',tabPro:'Gestionar Promociones',
-    secPatient:'Datos del Paciente',secOpts:'Opciones de Cotización',secEx:'Extras',secNotes:'Notas Adicionales',
-    lblName:'Nombre del Paciente',lblDate:'Fecha de Cotización',lblNotes:'Notas (opcional)',
-    btnAddOp:'＋ Agregar Opción',lblTotal:'TOTAL COTIZACIÓN',lblTotalSub:'Extras no incluidos en el total',
-    btnCreate:'📄  Crear Cotización en Google Docs',
-    btnCreating:'⏳ Creando documento...',
-    secPromos:'Promociones Activas',btnNewPromo:'＋ Nueva Promoción',
-    promo:'Promoción',manual:'Manual',lblProc:'Nombre del Procedimiento',
-    lblReal:'Precio Real (USD)',lblDisc:'Descuento (%)',lblProcInc:'Procedimientos incluidos (opcional)',
-    lblSelPromo:'Seleccionar Promoción',option:'OPCIÓN',remove:'✕ Eliminar',
-    edit:'✏️ Editar',del:'🗑️',save:'💾 Guardar',cancel:'Cancelar',showPrice:'Mostrar precio',
-    recNights:'Noches',recComp:'Incluir acompañante',recPriceLabel:'Total casa de recuperación',
-    infoMsg:'✅ Enviando datos a Claude... Revisa el chat de arriba para obtener el enlace de tu Google Doc.',
-    errNoName:'Por favor ingrese el nombre del paciente.',toastSaved:'Promoción guardada ✓',
-    dPatient:'Nombre del paciente',dDate:'Fecha',dOpt:'OPCIÓN',dProc:'Procedimiento',
-    dBefore:'Precio regular',dPromo:'Precio con promoción quirúrgica',dValid:'Válido',dBonos:'Incluye',
-    dPkgQ:'¿Qué procedimientos comprende el paquete?',
-    dPkgTitle:'Paquete de promoción 2026 incluye:',
-    dPkgItems:['5 noches en CIPLASTIC Hospital','1 Faja completa (Cuerpo/Bra)','Laboratorios preoperatorios','Medicamentos posquirúrgicos','Valoración preoperatoria con EKG','Medias de compresión'],
-    dTotal:'TOTAL 2026',dImportant:'IMPORTANTE',
-    dImportantText:'Deberá realizar un depósito de $250 USD – $500 USD para formalizar su cirugía, el resto deberá ser transferido a nuestra cuenta DOS SEMANAS ANTES del día de su cirugía.',
-    dSurgTitle:'El costo de la cirugía incluye:',
-    dSurgItems:['Insumos necesarios para su cirugía.','Medicamentos IV necesarios para su cirugía.','Honorarios médicos y de enfermería.','Procedimiento anestésico.','Seguimiento postquirúrgico de 2 meses.'],
-    dZelleTitle:'INFORMACIÓN DE DEPÓSITO POR ZELLE',
-    dZelleLabels:['Info','Nombre','Número telefónico','Correo (email)','Cantidad a depositar'],
-    dExtrasTitle:'EXTRAS',
-    dExtrasSub:'(Se presentan los precios en caso de que no se encuentre incluido dentro del paquete de la primera hoja o que se deban repetir)',
-    dContactTitle:'INFORMACIÓN IMPORTANTE',
-    dContactText:'Para aclarar cualquier duda con respecto a su presupuesto puede ponerse en contacto con nosotros:',
-    dThanks:'Gracias por elegirnos, tu confianza es muy importante para nosotros.\n¡Te esperamos con los brazos abiertos!',
-    extrasBase:[
-      {id:'labs',name:'Estudios preoperatorios',price:'$150 USD',
-       short:'Biometría hemática, química sanguínea, coagulación, VIH, embarazo, grupo sanguíneo, EGO.',
-       full:'Biometría hemática completa. Química sanguínea de 6 elementos (Panel metabólico completo). Tiempos de coagulación (TP, TPT). Panel viral de VIH. Prueba de embarazo en sangre. Grupo Sanguíneo y Rh. EGO.'},
-      {id:'vpo',name:'VPO — Valoración Preoperatoria por Médico Internista',price:'$120 USD',
-       short:'Valoración clínica por internista o cardiólogo. Incluye EKG e interpretación.',
-       full:'Consiste en una valoración clínica realizada por un médico internista o cardiólogo, para la identificación de riesgos quirúrgicos, con recomendaciones específicas para antes, durante y después de su cirugía. Incluye EKG y su interpretación.'},
-      {id:'meds',name:'Medicamentos',price:'$120 USD',
-       short:'Antibióticos, analgésicos, antiinflamatorios, protector gástrico y antieméticos.',
-       full:'Paquete con todo el medicamento vía oral necesario: antibióticos, analgésicos, antiinflamatorios, protectores de la mucosa gástrica y para controlar las náuseas.'},
-      {id:'garm',name:'Prendas de compresión',price:'$100 – $250 USD',
-       short:'Fajas compresivas para el proceso de recuperación.',
-       full:'Usted necesitará usar prendas compresivas (fajas) durante un periodo de tiempo variable para su recuperación. El costo dependerá de la prenda necesaria.'},
-      {id:'rec',name:'Casa de recuperación',priceBase:200,priceComp:60,
-       short:'Cuidado profesional, alimentación, Smart TV, Wi-Fi, A/C.',
-       full:'Casa de recuperación: lugar cómodo, agradable y seguro con cuidado de un enfermero profesional. Incluye: alimentación adecuada, snacks y bebidas saludables, Smart TV, Wi-Fi, teléfono, aire acondicionado/calefacción.'}
-    ]
-  },
-  en:{
-    appTitle:'Quote Generator',tabCot:'New Quote',tabPro:'Manage Promotions',
-    secPatient:'Patient Information',secOpts:'Quote Options',secEx:'Extras',secNotes:'Additional Notes',
-    lblName:'Patient Name',lblDate:'Quote Date',lblNotes:'Notes (optional)',
-    btnAddOp:'＋ Add Option',lblTotal:'QUOTE TOTAL',lblTotalSub:'Extras not included in total',
-    btnCreate:'📄  Create Quote in Google Docs',
-    btnCreating:'⏳ Creating document...',
-    secPromos:'Active Promotions',btnNewPromo:'＋ New Promotion',
-    promo:'Promotion',manual:'Manual',lblProc:'Procedure Name',
-    lblReal:'Regular Price (USD)',lblDisc:'Discount (%)',lblProcInc:'Included procedures (optional)',
-    lblSelPromo:'Select Promotion',option:'OPTION',remove:'✕ Remove',
-    edit:'✏️ Edit',del:'🗑️',save:'💾 Save',cancel:'Cancel',showPrice:'Show price',
-    recNights:'Nights',recComp:'Include companion',recPriceLabel:'Recovery house total',
-    infoMsg:'✅ Sending data to Claude... Check the chat above for your Google Doc link.',
-    errNoName:'Please enter the patient name.',toastSaved:'Promotion saved ✓',
-    dPatient:'Patient name',dDate:'Date',dOpt:'OPTION',dProc:'Procedure',
-    dBefore:'Regular price',dPromo:'Promotional surgical price',dValid:'Valid',dBonos:'Includes',
-    dPkgQ:'What does the package include?',
-    dPkgTitle:'2026 Promotion Package includes:',
-    dPkgItems:['5 nights at CIPLASTIC Hospital','1 Complete garment (Body/Bra)','Pre-operative labs','Post-surgical medications','Pre-operative assessment with EKG','Compression stockings'],
-    dTotal:'TOTAL 2026',dImportant:'IMPORTANT',
-    dImportantText:'A deposit of $250 USD – $500 USD is required to schedule your surgery. The remaining balance must be transferred TWO WEEKS BEFORE your surgery date.',
-    dSurgTitle:'The cost of surgery includes:',
-    dSurgItems:['Necessary surgical supplies.','Required IV medications.','Medical and nursing fees.','Anesthesia procedure.','2-month post-surgical follow-up.'],
-    dZelleTitle:'ZELLE DEPOSIT INFORMATION',
-    dZelleLabels:['Info','Name','Phone number','Email','Amount to deposit'],
-    dExtrasTitle:'EXTRAS',
-    dExtrasSub:'(Shown if not included in the package on page 1, or if they need to be repeated)',
-    dContactTitle:'IMPORTANT INFORMATION',
-    dContactText:'To clarify any questions about your quote, please contact us:',
-    dThanks:'Thank you for choosing us. Your trust means everything to us.\nWe look forward to welcoming you!',
-    extrasBase:[
-      {id:'labs',name:'Pre-operative studies',price:'$150 USD',
-       short:'Complete blood count, metabolic panel, coagulation, HIV, pregnancy, blood type, urinalysis.',
-       full:'Complete blood count. 6-element blood chemistry panel. Coagulation times (PT, PTT). HIV viral panel. Blood pregnancy test. Blood type and Rh. Urinalysis.'},
-      {id:'vpo',name:'VPO — Pre-operative Assessment by Internal Medicine Physician',price:'$120 USD',
-       short:'Clinical evaluation by internist or cardiologist. Includes EKG and interpretation.',
-       full:'Clinical evaluation by an internist or cardiologist to identify surgical risks, with personalized recommendations for before, during and after surgery. Includes EKG and interpretation.'},
-      {id:'meds',name:'Medications',price:'$120 USD',
-       short:'Antibiotics, analgesics, anti-inflammatories, gastric protector and anti-nausea.',
-       full:'Package with all necessary oral medications: antibiotics, analgesics, anti-inflammatories, gastric mucosal protectors and anti-nausea medications.'},
-      {id:'garm',name:'Compression garments',price:'$100 – $250 USD',
-       short:'Compression garments required during recovery.',
-       full:'You will need to wear compression garments during your recovery. The cost depends on the garment needed.'},
-      {id:'rec',name:'Recovery house',priceBase:200,priceComp:60,
-       short:'Professional care, meals, Smart TV, Wi-Fi, A/C.',
-       full:'Recovery house: comfortable, pleasant and safe place with professional nursing care. Includes: proper nutrition, healthy snacks and beverages, Smart TV, Wi-Fi, phone, air conditioning/heating.'}
-    ]
-  }
+const TX={
+es:{h1:'Generador de Cotizaciones',ts0:'Nueva Cotización',ts1:'Gestionar Promociones',lp:'Datos del Paciente',lpn:'Nombre del Paciente',lpd:'Fecha de Cotización',lo:'Opciones de Cotización',lex:'Extras',lno:'Notas Adicionales',lnol:'Notas (opcional)',badd:'＋ Agregar Opción',lt:'TOTAL COTIZACIÓN',lts:'Extras no incluidos en el total',bpdf:'🖨  Generar PDF',lpr:'Promociones Activas',bnp:'＋ Nueva Promoción',pr:'Promoción',mn:'Manual',lsp:'Seleccionar Promoción',lpc:'Procedimiento',lr:'Precio Real (USD)',ldc:'Descuento (%)',lpi:'Procedimientos incluidos (opcional)',opt:'OPCIÓN',rm:'✕ Eliminar',ed:'✏️ Editar',dl:'🗑️',sv:'Guardar',ca:'Cancelar',shp:'Mostrar precio',rn:'Noches',rc:'Acompañante',rpl:'Total',ns:'Sin nombre',
+PKG:['5 noches en CIPLASTIC Hospital','1 Faja completa (Cuerpo/Bra)','Laboratorios preoperatorios','Medicamentos posquirúrgicos','Valoración preoperatoria con EKG','Medias de compresión'],
+SURG:['Insumos necesarios para su cirugía.','Medicamentos IV necesarios para su cirugía.','Honorarios médicos y de enfermería.','Procedimiento anestésico.','Seguimiento postquirúrgico de 2 meses.'],
+ZL:['Info','Nombre','Número telefónico','Correo (email)','Cantidad a depositar'],
+dI:'IMPORTANTE',dIT:'Deberá realizar un depósito de $250 USD – $500 USD para formalizar su cirugía, el resto deberá ser transferido a nuestra cuenta DOS SEMANAS ANTES del día de su cirugía.',
+dST:'El costo de la cirugía incluye:',dZT:'INFORMACIÓN DE DEPÓSITO POR ZELLE',dET:'EXTRAS',
+dES:'(Se presentan en caso de no estar incluidos en el paquete principal o que se deban repetir)',
+dCT:'INFORMACIÓN IMPORTANTE',dCC:'Para aclarar cualquier duda sobre su presupuesto puede contactarnos:',
+dTk:'Gracias por elegirnos, tu confianza es muy importante para nosotros.\n¡Te esperamos con los brazos abiertos!',
+dPQ:'¿Qué procedimientos comprende el paquete?',dPT:'Paquete de promoción 2026 incluye:',
+dPat:'Nombre del paciente',dDate:'Fecha',dOpt:'OPCIÓN',dProc:'Procedimiento',
+dBef:'Precio regular',dPrm:'Precio con promoción quirúrgica',dVal:'Válido',dInc:'Incluye',dTot:'TOTAL 2026',
+EXT:[
+{id:'labs',n:'Estudios preoperatorios',pr:'$150 USD',sh:'Biometría hemática, química sanguínea, coagulación, VIH, embarazo, grupo sanguíneo, EGO.',fu:'Biometría hemática completa. Química sanguínea de 6 elementos (Panel metabólico completo). Tiempos de coagulación (TP, TPT). Panel viral de VIH. Prueba de embarazo en sangre. Grupo Sanguíneo y Rh. EGO.'},
+{id:'vpo',n:'VPO — Valoración Preoperatoria por Médico Internista',pr:'$120 USD',sh:'Evaluación clínica por internista o cardiólogo. Incluye EKG.',fu:'Valoración clínica por un médico internista o cardiólogo para identificación de riesgos quirúrgicos, con recomendaciones para antes, durante y después de cirugía. Incluye EKG y su interpretación.'},
+{id:'meds',n:'Medicamentos',pr:'$120 USD',sh:'Antibióticos, analgésicos, antiinflamatorios, protector gástrico y antieméticos.',fu:'Paquete con todo el medicamento vía oral: antibióticos, analgésicos, antiinflamatorios, protectores de la mucosa gástrica y para controlar las náuseas.'},
+{id:'garm',n:'Prendas de compresión',pr:'$100 – $250 USD',sh:'Fajas compresivas para la recuperación.',fu:'Prendas compresivas (fajas) durante la recuperación. El costo depende de la prenda necesaria.'},
+{id:'rec',n:'Casa de recuperación',pb:200,pc:60,sh:'Cuidado profesional, alimentación, Smart TV, Wi-Fi, A/C.',fu:'Casa de recuperación con cuidado de enfermero profesional. Incluye: alimentación adecuada, snacks y bebidas saludables, Smart TV, Wi-Fi, teléfono, aire acondicionado/calefacción.'}]},
+en:{h1:'Quote Generator',ts0:'New Quote',ts1:'Manage Promotions',lp:'Patient Information',lpn:'Patient Name',lpd:'Quote Date',lo:'Quote Options',lex:'Extras',lno:'Additional Notes',lnol:'Notes (optional)',badd:'＋ Add Option',lt:'QUOTE TOTAL',lts:'Extras not included in total',bpdf:'🖨  Generate PDF',lpr:'Active Promotions',bnp:'＋ New Promotion',pr:'Promotion',mn:'Manual',lsp:'Select Promotion',lpc:'Procedure',lr:'Regular Price (USD)',ldc:'Discount (%)',lpi:'Included procedures (optional)',opt:'OPTION',rm:'✕ Remove',ed:'✏️ Edit',dl:'🗑️',sv:'Save',ca:'Cancel',shp:'Show price',rn:'Nights',rc:'Companion',rpl:'Total',ns:'No name',
+PKG:['5 nights at CIPLASTIC Hospital','1 Complete garment (Body/Bra)','Pre-operative labs','Post-surgical medications','Pre-operative assessment with EKG','Compression stockings'],
+SURG:['Necessary surgical supplies.','Required IV medications.','Medical and nursing fees.','Anesthesia procedure.','2-month post-surgical follow-up.'],
+ZL:['Info','Name','Phone number','Email','Amount to deposit'],
+dI:'IMPORTANT',dIT:'A deposit of $250 USD–$500 USD is required to schedule your surgery. The remaining balance must be transferred TWO WEEKS BEFORE your surgery date.',
+dST:'The cost of surgery includes:',dZT:'ZELLE DEPOSIT INFORMATION',dET:'EXTRAS',
+dES:'(Shown if not included in the main package or if they need to be repeated)',
+dCT:'IMPORTANT INFORMATION',dCC:'To clarify any questions about your quote, please contact us:',
+dTk:'Thank you for choosing us. Your trust means everything to us.\nWe look forward to welcoming you!',
+dPQ:'What does the package include?',dPT:'2026 Promotion Package includes:',
+dPat:'Patient name',dDate:'Date',dOpt:'OPTION',dProc:'Procedure',
+dBef:'Regular price',dPrm:'Promotional surgical price',dVal:'Valid',dInc:'Includes',dTot:'TOTAL 2026',
+EXT:[
+{id:'labs',n:'Pre-operative studies',pr:'$150 USD',sh:'Blood count, metabolic panel, coagulation, HIV, pregnancy, blood type, urinalysis.',fu:'Complete blood count. 6-element blood chemistry panel. Coagulation times (PT, PTT). HIV viral panel. Blood pregnancy test. Blood type and Rh. Urinalysis.'},
+{id:'vpo',n:'VPO — Pre-operative Assessment by Internal Medicine Physician',pr:'$120 USD',sh:'Clinical evaluation by internist or cardiologist. Includes EKG.',fu:'Clinical evaluation by an internist or cardiologist to identify surgical risks, with personalized recommendations for before, during and after surgery. Includes EKG and interpretation.'},
+{id:'meds',n:'Medications',pr:'$120 USD',sh:'Antibiotics, analgesics, anti-inflammatories, gastric protector, anti-nausea.',fu:'Package with all necessary oral medications: antibiotics, analgesics, anti-inflammatories, gastric protectors and anti-nausea medications.'},
+{id:'garm',n:'Compression garments',pr:'$100 – $250 USD',sh:'Compression garments during recovery.',fu:'Compression garments during recovery. The cost depends on the garment needed.'},
+{id:'rec',n:'Recovery house',pb:200,pc:60,sh:'Professional care, meals, Smart TV, Wi-Fi, A/C.',fu:'Recovery house with professional nursing care. Includes: proper nutrition, healthy snacks, Smart TV, Wi-Fi, phone, air conditioning/heating.'}]}
 };
 
-let lang='es', oc=0, ops=[];
-let extras=[];
-let promos=[
-  {id:'p1',name:'Mommy Makeover',sub:{es:'+ 3 Masajes de Drenaje Linfático',en:'+ 3 Lymphatic Drainage Massages'},before:13300,promo:9500,valid:'1–15 Mayo/May 2026',
-   inc:{es:['Abdominoplastia extendida (Tummy Tuck)','Reparación de diástasis abdominal (Corset, plicatura de rectos)','Lipoescultura 360 con BBL','Mastopexia convencional con/sin implantes (Levantamiento de busto)'],
-        en:['Extended Abdominoplasty (Tummy Tuck)','Abdominal diastasis repair (Corset, muscle plication)','360 Liposculpture with BBL','Conventional Mastopexy with/without implants (Breast Lift)']},
-   notes:{es:'Si elige un implante entre 500cc y 799cc, se realiza un cargo extra de $250 USD. Si elige uno mayor a 800cc, un cargo extra de $600 USD.',
-          en:'If you choose an implant between 500cc and 799cc, an extra charge of $250 USD applies. Over 800cc: extra $600 USD.'},
-   bonos:{es:['3 Masajes de Drenaje Linfático'],en:['3 Lymphatic Drainage Massages']},pkg:true},
-  {id:'p2',name:'Mommy Face Stunning',sub:{es:'Rhinoplastia + Blefaroplastia',en:'Rhinoplasty + Blepharoplasty'},before:7812,promo:5990,valid:'1–15 Mayo/May 2026',
-   inc:{es:['Rhinoplastia (Rinoplastia)','Blefaroplastia 4 párpados'],en:['Rhinoplasty','Blepharoplasty (4 eyelids)']},
-   notes:{es:'',en:''},bonos:{es:[],en:[]},pkg:false},
-  {id:'p3',name:'Lipoescultura / Liposculpture',sub:{es:'3 Masajes Linfáticos incluidos',en:'3 Lymphatic Massages included'},before:15000,promo:4600,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Lipoescultura 360'],en:['360 Liposculpture']},notes:{es:'',en:''},bonos:{es:['3 Masajes Linfáticos'],en:['3 Lymphatic Massages']},pkg:false},
-  {id:'p4',name:'Facelift',sub:{es:'3 Masajes Linfáticos incluidos',en:'3 Lymphatic Massages included'},before:4300,promo:5990,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Facelift (Ritidectomía)'],en:['Facelift (Rhytidectomy)']},notes:{es:'',en:''},bonos:{es:['3 Masajes Linfáticos'],en:['3 Lymphatic Massages']},pkg:false},
-  {id:'p5',name:'Rinoplastia / Rhinoplasty',sub:{es:'1 HydroFacial incluido',en:'1 HydroFacial included'},before:6000,promo:3790,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Rinoplastia'],en:['Rhinoplasty']},notes:{es:'',en:''},bonos:{es:['1 HydroFacial'],en:['1 HydroFacial']},pkg:false},
-  {id:'p6',name:'Blefaroplastia / Blepharoplasty',sub:{es:'1 HydroFacial incluido',en:'1 HydroFacial included'},before:4900,promo:3090,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Blefaroplastia 4 párpados'],en:['Blepharoplasty 4 eyelids']},notes:{es:'',en:''},bonos:{es:['1 HydroFacial'],en:['1 HydroFacial']},pkg:false},
-  {id:'p7',name:'Aumento Mamario / Breast Augmentation',sub:{es:'1 Noche de Hospitalización incluida',en:'1 Night Hospitalization included'},before:5700,promo:3600,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Aumento mamario con implantes'],en:['Breast augmentation with implants']},notes:{es:'',en:''},bonos:{es:['1 Noche de Hospitalización'],en:['1 Night Hospitalization']},pkg:false},
-  {id:'p8',name:'Tummy Tuck',sub:{es:'3 Masajes Linfáticos incluidos',en:'3 Lymphatic Massages included'},before:10300,promo:6500,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Abdominoplastia (Tummy Tuck)'],en:['Abdominoplasty (Tummy Tuck)']},notes:{es:'',en:''},bonos:{es:['3 Masajes Linfáticos'],en:['3 Lymphatic Massages']},pkg:false},
-  {id:'p9',name:'Lipo Cervical + J Plasma + Bichectomía',sub:{es:'1 Noche de Hospitalización incluida',en:'1 Night Hospitalization included'},before:3000,promo:2700,valid:'1–31 Mayo/May 2026',
-   inc:{es:['Liposucción Cervical','J Plasma','Bichectomía'],en:['Cervical Liposuction','J Plasma','Bichectomy']},notes:{es:'',en:''},bonos:{es:['1 Noche de Hospitalización'],en:['1 Night Hospitalization']},pkg:false},
+const DP=[
+{id:'p1',name:'Mommy Makeover',sub:{es:'+ 3 Masajes de Drenaje Linfático',en:'+ 3 Lymphatic Drainage Massages'},before:13300,promo:9500,valid:'1–15 Mayo/May 2026',inc:{es:['Abdominoplastia extendida (Tummy Tuck)','Reparación de diástasis abdominal (Corset, plicatura de rectos)','Lipoescultura 360 con BBL','Mastopexia convencional con/sin implantes (Levantamiento de busto)'],en:['Extended Abdominoplasty (Tummy Tuck)','Abdominal diastasis repair (Corset, muscle plication)','360 Liposculpture with BBL','Conventional Mastopexy with/without implants (Breast Lift)']},notes:{es:'Implante 500–799cc: cargo extra $250 USD. Implante >800cc: cargo extra $600 USD.',en:'Implant 500–799cc: extra $250 USD. Implant >800cc: extra $600 USD.'},bonos:{es:['3 Masajes de Drenaje Linfático'],en:['3 Lymphatic Drainage Massages']},pkg:true},
+{id:'p2',name:'Mommy Face Stunning',sub:{es:'Rhinoplastia + Blefaroplastia 4 párpados',en:'Rhinoplasty + Blepharoplasty 4 eyelids'},before:7812,promo:5990,valid:'1–15 Mayo/May 2026',inc:{es:['Rhinoplastia','Blefaroplastia 4 párpados'],en:['Rhinoplasty','Blepharoplasty 4 eyelids']},notes:{es:'',en:''},bonos:{es:[],en:[]},pkg:false},
+{id:'p3',name:'Lipoescultura / Liposculpture',sub:{es:'+ 3 Masajes Linfáticos',en:'+ 3 Lymphatic Massages'},before:15000,promo:4600,valid:'1–31 Mayo/May 2026',inc:{es:['Lipoescultura 360'],en:['360 Liposculpture']},notes:{es:'',en:''},bonos:{es:['3 Masajes Linfáticos'],en:['3 Lymphatic Massages']},pkg:false},
+{id:'p4',name:'Facelift',sub:{es:'+ 3 Masajes Linfáticos',en:'+ 3 Lymphatic Massages'},before:4300,promo:5990,valid:'1–31 Mayo/May 2026',inc:{es:['Facelift (Ritidectomía)'],en:['Facelift (Rhytidectomy)']},notes:{es:'',en:''},bonos:{es:['3 Masajes Linfáticos'],en:['3 Lymphatic Massages']},pkg:false},
+{id:'p5',name:'Rinoplastia / Rhinoplasty',sub:{es:'+ 1 HydroFacial',en:'+ 1 HydroFacial'},before:6000,promo:3790,valid:'1–31 Mayo/May 2026',inc:{es:['Rinoplastia'],en:['Rhinoplasty']},notes:{es:'',en:''},bonos:{es:['1 HydroFacial'],en:['1 HydroFacial']},pkg:false},
+{id:'p6',name:'Blefaroplastia / Blepharoplasty',sub:{es:'+ 1 HydroFacial',en:'+ 1 HydroFacial'},before:4900,promo:3090,valid:'1–31 Mayo/May 2026',inc:{es:['Blefaroplastia 4 párpados'],en:['Blepharoplasty 4 eyelids']},notes:{es:'',en:''},bonos:{es:['1 HydroFacial'],en:['1 HydroFacial']},pkg:false},
+{id:'p7',name:'Aumento Mamario / Breast Augmentation',sub:{es:'+ 1 Noche de Hospitalización',en:'+ 1 Night Hospitalization'},before:5700,promo:3600,valid:'1–31 Mayo/May 2026',inc:{es:['Aumento mamario con implantes'],en:['Breast augmentation with implants']},notes:{es:'',en:''},bonos:{es:['1 Noche de Hospitalización'],en:['1 Night Hospitalization']},pkg:false},
+{id:'p8',name:'Tummy Tuck',sub:{es:'+ 3 Masajes Linfáticos',en:'+ 3 Lymphatic Massages'},before:10300,promo:6500,valid:'1–31 Mayo/May 2026',inc:{es:['Abdominoplastia (Tummy Tuck)'],en:['Abdominoplasty (Tummy Tuck)']},notes:{es:'',en:''},bonos:{es:['3 Masajes Linfáticos'],en:['3 Lymphatic Massages']},pkg:false},
+{id:'p9',name:'Lipo Cervical + J Plasma + Bichectomía',sub:{es:'+ 1 Noche de Hospitalización',en:'+ 1 Night Hospitalization'},before:3000,promo:2700,valid:'1–31 Mayo/May 2026',inc:{es:['Liposucción Cervical','J Plasma','Bichectomía'],en:['Cervical Liposuction','J Plasma','Bichectomy']},notes:{es:'',en:''},bonos:{es:['1 Noche de Hospitalización'],en:['1 Night Hospitalization']},pkg:false}
 ];
 
-function t(k){return T[lang][k];}
+let L='es',oc=0,ops=[],EX=[],PR=[...DP];
+const t=k=>TX[L][k];
+const $=id=>document.getElementById(id);
+const rPrc=e=>{const n=e.nights||1,c=e.companion||false,tot=n*200+(c?n*60:0);return`$${tot} USD`;};
 
-function initExtras(){
-  const prev=extras; // preserve sel/sp/nights/companion
-  extras=T[lang].extrasBase.map((e,i)=>{
-    const old=prev[i]||{};
-    return {...e, sel:old.sel||false, sp:old.sp!==undefined?old.sp:true,
-      nights:e.id==='rec'?(old.nights||1):undefined,
-      companion:e.id==='rec'?(old.companion||false):undefined};
-  });
+function loadSaved(){try{const s=localStorage.getItem('cp_promos');if(s)PR=JSON.parse(s);}catch(e){}}
+function savePromos(){try{localStorage.setItem('cp_promos',JSON.stringify(PR));}catch(e){}}
+
+function iEX(){const p=EX;EX=TX[L].EXT.map((e,i)=>({...e,sel:p[i]?.sel||false,sp:p[i]?.sp!==undefined?p[i].sp:true,nights:e.id==='rec'?(p[i]?.nights||1):undefined,companion:e.id==='rec'?(p[i]?.companion||false):undefined}));}
+
+function apL(){
+  document.querySelectorAll('.lb').forEach((b,i)=>b.classList.toggle('on',['es','en'][i]===L));
+  const m={h1t:'h1',ts0:'ts0',ts1:'ts1',lp:'lp',lpn:'lpn',lpd:'lpd',lo:'lo',lex:'lex',lno:'lno',lnol:'lnol',badd:'badd',lt:'lt',lts:'lts',bpdf:'bpdf',lpr:'lpr',bnp:'bnp'};
+  // remove any leftover gdoc button
+  const gb=document.getElementById('bgdoc');if(gb)gb.remove();
+  Object.entries(m).forEach(([k,id])=>{const el=$(id);if(el)el.textContent=t(k);});
+  $('pn').placeholder=L==='es'?'Ej. ROSA PÉREZ':'E.g. ROSE SMITH';
+  iEX();ops.forEach(o=>rOp(o));rEX();rPR();
+}
+function sL(l){L=l;apL();calc();}
+function sw(i){['s0','s1'].forEach((id,j)=>{$(id).style.display=j===i?'block':'none';$('t'+j).classList.toggle('on',j===i);});}
+function init(){
+  loadSaved();
+  $('pd').value=new Date().toISOString().split('T')[0];
+  iEX();apL();addOp();rEX();rPR();calc();
 }
 
-function recPrice(e){
-  const n=e.nights||1, base=n*200, comp=e.companion?n*60:0;
-  const l=lang==='es';
-  return `$${base} USD${comp?` + $${comp} USD ${l?'acompañante':'companion'}`:''}`;
-}
-
-async function init(){
-  document.getElementById('pdate').value=new Date().toISOString().split('T')[0];
-  try{const r=await window.storage.get('cp_promos');if(r?.value)promos=JSON.parse(r.value);}catch(e){}
-  initExtras(); applyLang(); addOp(); renderExtras(); renderPromos(); calc();
-}
-
-function applyLang(){
-  document.querySelectorAll('.lbtn').forEach((b,i)=>b.classList.toggle('active',['es','en'][i]===lang));
-  const ids={at:'appTitle','tt-cot':'tabCot','tt-pro':'tabPro','lbl-patient-sec':'secPatient',
-    'lbl-opts-sec':'secOpts','lbl-ex-sec':'secEx','lbl-notes-sec':'secNotes',
-    'lbl-pname':'lblName','lbl-pdate':'lblDate','lbl-notes':'lblNotes',
-    'btn-addop':'btnAddOp','lbl-total':'lblTotal','lbl-total-sub':'lblTotalSub',
-    'btn-create':'btnCreate','lbl-promos-sec':'secPromos','btn-newpromo':'btnNewPromo'};
-  Object.entries(ids).forEach(([id,key])=>{const el=document.getElementById(id);if(el)el.textContent=t(key);});
-  document.getElementById('pname').placeholder=lang==='es'?'Ej. ROSA PÉREZ':'E.g. ROSE SMITH';
-  initExtras(); renderExtras(); ops.forEach(o=>renderOp(o)); renderPromos();
-}
-
-function setLang(l){lang=l;applyLang();calc();}
-function sw(tab){
-  ['cot','pro'].forEach(n=>{
-    document.getElementById('tab-'+n).classList.toggle('active',n===tab);
-    document.getElementById('tc-'+n).classList.toggle('active',n===tab);
-  });
-}
-
-/* === OPS === */
-function addOp(){
-  oc++;
-  ops.push({id:oc,type:'promo',pid:promos[0]?.id||'',name:'',real:'',disc:'',desc:''});
-  renderOp(ops[ops.length-1]); calc();
-}
+function addOp(){oc++;const op={id:oc,type:'promo',pid:PR[0]?.id||'',name:'',real:'',disc:'',desc:''};ops.push(op);rOp(op);calc();}
 function rmOp(id){ops=ops.filter(o=>o.id!==id);document.querySelector(`[data-oid="${id}"]`)?.remove();calc();}
 
-function renderOp(op){
-  const cont=document.getElementById('ocont');
-  let el=cont.querySelector(`[data-oid="${op.id}"]`);
-  const d=document.createElement('div'); d.className='oc'; d.dataset.oid=op.id;
+function rOp(op){
+  const cont=$('oc');let el=cont.querySelector(`[data-oid="${op.id}"]`);
+  const d=document.createElement('div');d.className='oc';d.dataset.oid=op.id;
   const idx=ops.findIndex(o=>o.id===op.id)+1;
-  const optHtml=promos.map(p=>`<option value="${p.id}"${op.pid===p.id?' selected':''}>${p.name} — ${p.sub[lang]||''}</option>`).join('');
-  const sp=promos.find(p=>p.id===op.pid);
-  const rp=parseFloat(op.real)||0, dsc=parseFloat(op.disc)||0, dp=rp*(1-dsc/100);
-  d.innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <span class="onr">${t('option')} ${idx}</span>
-      ${ops.length>1?`<button class="btn btn-del btn-sm" onclick="rmOp(${op.id})">${t('remove')}</button>`:''}
-    </div>
-    <div class="tgl">
-      <button class="tbtn${op.type==='promo'?' active':''}" onclick="setType(${op.id},'promo')">🏷️ ${t('promo')}</button>
-      <button class="tbtn${op.type==='manual'?' active':''}" onclick="setType(${op.id},'manual')">✏️ ${t('manual')}</button>
-    </div>
-    ${op.type==='promo'?`
-      <div class="fg"><label>${t('lblSelPromo')}</label><select onchange="setPid(${op.id},this.value)">${optHtml}</select></div>
-      ${sp?`<div class="pbadge">
-        <div style="font-size:14px;font-weight:700;color:#fff">${sp.name} <span style="font-size:11px;opacity:.7">${sp.sub[lang]}</span></div>
-        <div class="pbadge-prices"><span class="pbadge-before">$${sp.before.toLocaleString()} USD</span><span class="pbadge-now">$${sp.promo.toLocaleString()} USD</span></div>
-        <div class="pbadge-valid">${t('dValid')}: ${sp.valid}</div>
-        ${sp.bonos[lang]?.length?`<div class="pbadge-bonos">${sp.bonos[lang].map(b=>`<span class="bono-pill">✓ ${b}</span>`).join('')}</div>`:''}
-      </div>`:''}
-    `:`
-      <div class="fg"><label>${t('lblProc')}</label><input value="${op.name}" oninput="setF(${op.id},'name',this.value)"></div>
-      <div class="frow">
-        <div class="fg"><label>${t('lblReal')}</label><input type="number" value="${op.real}" placeholder="0" oninput="setF(${op.id},'real',this.value);renderOp(ops.find(o=>o.id==${op.id}));calc()"></div>
-        <div class="fg"><label>${t('lblDisc')}</label><input type="number" value="${op.disc}" placeholder="0" min="0" max="100" oninput="setF(${op.id},'disc',this.value);renderOp(ops.find(o=>o.id==${op.id}));calc()"></div>
-      </div>
-      ${rp>0?`<div class="calcbox">${dsc>0?`${t('dBefore')}: <s style="color:#aaa">$${rp.toLocaleString()}</s> → `:''}<strong>$${dp.toLocaleString('es-MX',{maximumFractionDigits:0})} USD</strong>${dsc>0?` <span style="color:#aaa;font-size:10px">(-${dsc}%)</span>`:''}</div>`:''}
-      <div class="fg" style="margin-top:8px"><label>${t('lblProcInc')}</label>
-        <textarea rows="2" oninput="setF(${op.id},'desc',this.value)">${op.desc}</textarea>
-      </div>
-    `}`;
-  if(el)el.replaceWith(d); else cont.appendChild(d);
+  const sp=PR.find(p=>p.id===op.pid);
+  const opts=PR.map(p=>`<option value="${p.id}"${op.pid===p.id?' selected':''}>${p.name} — ${p.sub[L]||''}</option>`).join('');
+  const rp2=parseFloat(op.real)||0,ds=parseFloat(op.disc)||0,dp=rp2*(1-ds/100);
+  d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <span style="background:var(--nv);color:#fff;font-size:10px;font-weight:800;padding:2px 9px;border-radius:4px">${t('opt')} ${idx}</span>
+    ${ops.length>1?`<button class="bdel" onclick="rmOp(${op.id})">${t('rm')}</button>`:''}
+  </div>
+  <div class="tgl">
+    <button class="tb${op.type==='promo'?' on':''}" onclick="sT(${op.id},'promo')">🏷️ ${t('pr')}</button>
+    <button class="tb${op.type==='manual'?' on':''}" onclick="sT(${op.id},'manual')">✏️ ${t('mn')}</button>
+  </div>
+  ${op.type==='promo'?`<div class="fg"><label>${t('lsp')}</label><select onchange="sP(${op.id},this.value)">${opts}</select></div>
+  ${sp?`<div class="bdg"><div style="font-size:13px;font-weight:700">${sp.name} <span style="font-size:10px;opacity:.7;font-weight:400">${sp.sub[L]}</span></div>
+  <div style="display:flex;align-items:baseline;gap:9px;margin-top:7px"><span style="text-decoration:line-through;opacity:.45;font-size:11px">$${sp.before.toLocaleString()} USD</span><span style="font-size:19px;font-weight:700;color:#7dd8e8">$${sp.promo.toLocaleString()} USD</span></div>
+  <div style="font-size:9px;opacity:.55;margin-top:2px">${t('dVal')}: ${sp.valid}</div>
+  ${sp.bonos[L]?.length?`<div style="margin-top:5px">${sp.bonos[L].map(b=>`<span class="bp">✓ ${b}</span>`).join('')}</div>`:''}</div>`:''}`
+  :`<div class="fg"><label>${t('lpc')}</label><input value="${op.name}" oninput="sF(${op.id},'name',this.value)"></div>
+  <div class="r2">
+    <div class="fg"><label>${t('lr')}</label><input type="number" value="${op.real}" placeholder="0" oninput="sF(${op.id},'real',this.value);rOp(ops.find(o=>o.id==${op.id}));calc()"></div>
+    <div class="fg"><label>${t('ldc')}</label><input type="number" value="${op.disc}" placeholder="0" min="0" max="100" oninput="sF(${op.id},'disc',this.value);rOp(ops.find(o=>o.id==${op.id}));calc()"></div>
+  </div>
+  ${rp2>0?`<div class="cbox">${ds>0?`<s style="opacity:.5">$${rp2.toLocaleString()}</s> → `:''}<strong style="color:var(--nv)">$${Math.round(dp).toLocaleString()} USD</strong>${ds>0?` <span style="opacity:.6">(-${ds}%)</span>`:''}</div>`:''}
+  <div class="fg" style="margin-top:7px"><label>${t('lpi')}</label><textarea rows="2" oninput="sF(${op.id},'desc',this.value)">${op.desc}</textarea></div>`}`;
+  el?el.replaceWith(d):cont.appendChild(d);
 }
-function setType(id,tp){const o=ops.find(x=>x.id===id);if(o){o.type=tp;renderOp(o);calc();}}
-function setPid(id,v){const o=ops.find(x=>x.id===id);if(o){o.pid=v;renderOp(o);calc();}}
-function setF(id,f,v){const o=ops.find(x=>x.id===id);if(o)o[f]=v;}
+function sT(id,tp){const o=ops.find(x=>x.id===id);if(o){o.type=tp;rOp(o);calc();}}
+function sP(id,v){const o=ops.find(x=>x.id===id);if(o){o.pid=v;rOp(o);calc();}}
+function sF(id,f,v){const o=ops.find(x=>x.id===id);if(o)o[f]=v;}
 
-/* === EXTRAS === */
-function renderExtras(){
-  const cont=document.getElementById('excont');
-  cont.innerHTML=extras.map(e=>{
+function rEX(){
+  $('ec').innerHTML=EX.map(e=>{
     if(e.id==='rec'){
-      const n=e.nights||1, comp=e.companion||false;
-      const base=n*200, compAmt=comp?n*60:0, total=base+compAmt;
-      return `<div class="er-wrap">
-        <div class="er">
-          <input type="checkbox" id="ex_rec"${e.sel?' checked':''} onchange="togEx('rec',this.checked)">
-          <div class="einfo"><div class="ename">${e.name}</div><div class="edesc">${e.short}</div></div>
-          <div class="epright">
-            <div class="eprice" id="rec-price-disp">$${total} USD</div>
-            <label class="spt"><input type="checkbox"${e.sp?' checked':''} onchange="togSP('rec',this.checked)"> ${t('showPrice')}</label>
-          </div>
+      const n=e.nights||1,c=e.companion||false,tot=n*200+(c?n*60:0);
+      return`<div><div class="er"><input type="checkbox"${e.sel?' checked':''} onchange="tEx('rec',this.checked)" style="margin-top:2px">
+      <div style="flex:1"><div style="font-size:12px;font-weight:700">${e.n}</div><div style="font-size:10px;color:var(--lt);margin-top:1px">${e.sh}</div></div>
+      <div class="rp"><div id="rpdsp" style="font-size:11px;font-weight:700;color:var(--tl)">$${tot} USD</div>
+      <label style="display:flex;align-items:center;gap:3px;font-size:10px;color:var(--lt);cursor:pointer"><input type="checkbox"${e.sp?' checked':''} onchange="tSP('rec',this.checked)"> ${t('shp')}</label></div></div>
+      <div class="rb${e.sel?' on':''}" id="recbox">
+        <div class="r3" style="gap:8px">
+          <div class="fg" style="margin-bottom:0"><label>${t('rn')}</label><input type="number" min="1" max="30" value="${n}" oninput="sRN(this.value)"></div>
+          <div class="fg" style="margin-bottom:0"><label>${t('rc')} <span style="color:var(--lt);font-weight:400">(+$60/noche)</span></label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;margin-top:5px"><input type="checkbox"${c?' checked':''} onchange="sRC(this.checked)"> +$${e.pc} USD/noche</label></div>
+          <div class="fg" style="margin-bottom:0"><label>${t('rpl')}</label><div id="rtot" style="font-weight:700;color:var(--nv);margin-top:5px;font-size:14px">$${tot} USD</div></div>
         </div>
-        <div class="rec-opts${e.sel?' show':''}" id="rec-opts-panel">
-          <div class="frow3" style="margin-bottom:0">
-            <div class="fg" style="margin-bottom:0">
-              <label>${t('recNights')}</label>
-              <input type="number" id="rec-nights" min="1" max="30" value="${n}" style="width:100%" oninput="setRecNights(this.value)">
-            </div>
-            <div class="fg" style="margin-bottom:0;justify-content:flex-end">
-              <label style="margin-bottom:8px">${t('recComp')}</label>
-              <label class="rec-chk"><input type="checkbox" id="rec-comp"${comp?' checked':''} onchange="setRecComp(this.checked)"> +$${e.priceComp} USD/noche</label>
-            </div>
-            <div class="fg" style="margin-bottom:0;justify-content:flex-end">
-              <label>${t('recPriceLabel')}</label>
-              <span class="rec-price-tag" id="rec-total-tag">$${total} USD</span>
-            </div>
-          </div>
-        </div>
-      </div>`;
+      </div></div>`;
     }
-    return `<div class="er-wrap"><div class="er">
-      <input type="checkbox" id="ex_${e.id}"${e.sel?' checked':''} onchange="togEx('${e.id}',this.checked)">
-      <div class="einfo"><div class="ename">${e.name}</div><div class="edesc">${e.short}</div></div>
-      <div class="epright">
-        <div class="eprice">${e.price}</div>
-        <label class="spt"><input type="checkbox"${e.sp?' checked':''} onchange="togSP('${e.id}',this.checked)"> ${t('showPrice')}</label>
-      </div>
-    </div></div>`;
+    return`<div class="er"><input type="checkbox"${e.sel?' checked':''} onchange="tEx('${e.id}',this.checked)" style="margin-top:2px">
+    <div style="flex:1"><div style="font-size:12px;font-weight:700">${e.n}</div><div style="font-size:10px;color:var(--lt);margin-top:1px">${e.sh}</div></div>
+    <div class="rp"><div style="font-size:11px;font-weight:700;color:var(--tl)">${e.pr}</div>
+    <label style="display:flex;align-items:center;gap:3px;font-size:10px;color:var(--lt);cursor:pointer"><input type="checkbox"${e.sp?' checked':''} onchange="tSP('${e.id}',this.checked)"> ${t('shp')}</label></div></div>`;
   }).join('');
 }
+function tEx(id,v){const e=EX.find(x=>x.id===id);if(!e)return;e.sel=v;if(id==='rec'){const b=$('recbox');if(b)b.classList.toggle('on',v);}}
+function tSP(id,v){EX.find(e=>e.id===id).sp=v;rEX();}
+function sRN(v){const e=EX.find(x=>x.id==='rec');if(!e)return;e.nights=Math.max(1,parseInt(v)||1);uRD(e);}
+function sRC(v){const e=EX.find(x=>x.id==='rec');if(!e)return;e.companion=v;uRD(e);}
+function uRD(e){const n=e.nights||1,c=e.companion||false,tot=n*200+(c?n*60:0);['rpdsp','rtot'].forEach(id=>{const el=$(id);if(el)el.textContent=`$${tot} USD`;});}
+function calc(){let t2=0;ops.forEach(o=>{if(o.type==='promo'){const p=PR.find(x=>x.id===o.pid);if(p)t2+=p.promo;}else{const r=parseFloat(o.real)||0,d=parseFloat(o.disc)||0;t2+=r*(1-d/100);}});$('td').textContent=`$${Math.round(t2).toLocaleString()} USD`;}
 
-function togEx(id,v){
-  const e=extras.find(x=>x.id===id); if(!e)return; e.sel=v;
-  if(id==='rec'){
-    const panel=document.getElementById('rec-opts-panel');
-    if(panel)panel.classList.toggle('show',v);
-  }
+function rPR(){
+  const c=$('pl');if(!c)return;
+  c.innerHTML=PR.map((p,i)=>`<div class="pm"><div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div><div style="font-weight:700;font-size:13px">${p.name}<span class="tag">${p.valid?.includes('31')?'Glow Fwd':'Mommy Stunne'}</span></div>
+    <div style="font-size:11px;color:var(--lt);margin-top:2px">${p.sub[L]} · ${p.valid}</div>
+    <div style="margin-top:4px"><span style="text-decoration:line-through;color:var(--lt);font-size:11px">$${p.before.toLocaleString()}</span><strong style="color:var(--nv);margin-left:8px">$${p.promo.toLocaleString()} USD</strong></div></div>
+    <div style="display:flex;gap:5px"><button class="bsm" onclick="openPF(${i})">${t('ed')}</button><button class="bdel" onclick="dPR(${i})">${t('dl')}</button></div>
+  </div></div>`).join('');
 }
-function togSP(id,v){extras.find(e=>e.id===id).sp=v;renderExtras();}
+function openPF(idx=null){
+  const p=idx!=null?PR[idx]:{id:'p'+Date.now(),name:'',sub:{es:'',en:''},before:0,promo:0,valid:'',inc:{es:[],en:[]},notes:{es:'',en:''},bonos:{es:[],en:[]},pkg:false};
+  $('pf').innerHTML=`<div class="card" style="border:2px solid var(--tl)"><div class="ct">${idx!=null?t('ed'):t('bnp')}</div>
+  <div class="r2"><div class="fg"><label>Nombre / Name</label><input id="fn" value="${p.name}"></div><div class="fg"><label>Vigencia / Valid</label><input id="fv" value="${p.valid}"></div></div>
+  <div class="r2"><div class="fg"><label>Subtítulo ES</label><input id="fses" value="${p.sub.es}"></div><div class="fg"><label>Subtitle EN</label><input id="fsen" value="${p.sub.en}"></div></div>
+  <div class="r2"><div class="fg"><label>Precio Antes (USD)</label><input type="number" id="fb" value="${p.before}"></div><div class="fg"><label>Precio Promo (USD)</label><input type="number" id="fp" value="${p.promo}"></div></div>
+  <div class="r2"><div class="fg"><label>Procedimientos ES (uno por línea)</label><textarea id="fies" rows="3">${(p.inc.es||[]).join('\n')}</textarea></div><div class="fg"><label>Procedures EN (one per line)</label><textarea id="fien" rows="3">${(p.inc.en||[]).join('\n')}</textarea></div></div>
+  <div class="r2"><div class="fg"><label>Bonos ES</label><textarea id="fbes" rows="2">${(p.bonos.es||[]).join('\n')}</textarea></div><div class="fg"><label>Bonuses EN</label><textarea id="fben" rows="2">${(p.bonos.en||[]).join('\n')}</textarea></div></div>
+  <div class="r2"><div class="fg"><label>Notas ES</label><textarea id="fnes" rows="2">${p.notes.es||''}</textarea></div><div class="fg"><label>Notes EN</label><textarea id="fnen" rows="2">${p.notes.en||''}</textarea></div></div>
+  <label style="display:flex;align-items:center;gap:6px;font-size:11px;margin-bottom:10px"><input type="checkbox" id="fpkg"${p.pkg?' checked':''}> Incluye paquete hospitalización / Includes hospital package</label>
+  <div style="display:flex;gap:7px">
+    <button onclick="svPR(${idx})" style="background:var(--nv);color:#fff;border:none;padding:8px 16px;border-radius:7px;cursor:pointer;font-size:12px;font-weight:700">${t('sv')}</button>
+    <button onclick="$('pf').innerHTML=''" style="border:1.5px solid var(--bd);background:transparent;padding:8px 16px;border-radius:7px;cursor:pointer;font-size:12px">${t('ca')}</button>
+  </div></div>`;
+  $('pf').scrollIntoView({behavior:'smooth'});
+}
+function svPR(idx){
+  const np={id:idx!=null?PR[idx].id:'p'+Date.now(),name:$('fn').value,sub:{es:$('fses').value,en:$('fsen').value},before:+$('fb').value||0,promo:+$('fp').value||0,valid:$('fv').value,inc:{es:$('fies').value.split('\n').filter(l=>l.trim()),en:$('fien').value.split('\n').filter(l=>l.trim())},bonos:{es:$('fbes').value.split('\n').filter(l=>l.trim()),en:$('fben').value.split('\n').filter(l=>l.trim())},notes:{es:$('fnes').value,en:$('fnen').value},pkg:$('fpkg').checked};
+  if(idx!=null)PR[idx]=np;else PR.push(np);
+  savePromos();$('pf').innerHTML='';rPR();ops.forEach(o=>rOp(o));
+}
+function dPR(i){if(!confirm(L==='es'?'¿Eliminar esta promoción?':'Delete this promotion?'))return;PR.splice(i,1);savePromos();rPR();}
 
-function setRecNights(v){
-  const e=extras.find(x=>x.id==='rec'); if(!e)return;
-  e.nights=Math.max(1,parseInt(v)||1);
-  updateRecDisplay(e);
-}
-function setRecComp(v){
-  const e=extras.find(x=>x.id==='rec'); if(!e)return;
-  e.companion=v;
-  updateRecDisplay(e);
-}
-function updateRecDisplay(e){
-  const n=e.nights||1, comp=e.companion||false;
-  const total=n*200+(comp?n*60:0);
-  const d1=document.getElementById('rec-price-disp');
-  const d2=document.getElementById('rec-total-tag');
-  if(d1)d1.textContent=`$${total} USD`;
-  if(d2)d2.textContent=`$${total} USD`;
-}
-
-function calc(){
-  let t2=0;
-  ops.forEach(o=>{
-    if(o.type==='promo'){const p=promos.find(x=>x.id===o.pid);if(p)t2+=p.promo;}
-    else{const r=parseFloat(o.real)||0,d=parseFloat(o.disc)||0;t2+=r*(1-d/100);}
-  });
-  document.getElementById('tdisplay').textContent=`$${t2.toLocaleString('es-MX',{maximumFractionDigits:0})} USD`;
-}
-
-/* === PROMO MANAGEMENT === */
-function renderPromos(){
-  const c=document.getElementById('plist');if(!c)return;
-  c.innerHTML=!promos.length?`<p style="color:#aaa;font-size:12px">Sin promociones.</p>`:
-  promos.map((p,i)=>`<div class="pmcard">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start">
-      <div>
-        <div class="pmname">${p.name}<span class="tag-mayo">${p.valid?.includes('31')?'Glow Fwd':'Mommy Stunne'}</span></div>
-        <div class="pmsub">${p.sub[lang]} · ${p.valid}</div>
-        <div style="margin-top:4px"><span style="text-decoration:line-through;color:#aaa;font-size:11px">$${p.before.toLocaleString()}</span>
-          <strong style="color:var(--nv);margin-left:8px;font-size:13px">$${p.promo.toLocaleString()} USD</strong></div>
-      </div>
-      <div style="display:flex;gap:5px">
-        <button class="btn btn-out btn-sm" onclick="openPromoForm(${i})">${t('edit')}</button>
-        <button class="btn btn-del btn-sm" onclick="delPromo(${i})">${t('del')}</button>
-      </div>
+/* ===== FOOTER SVG ===== */
+const FTR_SVG=`<div class="pftr">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 88" preserveAspectRatio="none">
+    <rect width="780" height="88" fill="#1a3a6b"/>
+    <path d="M0,52 C120,24 280,64 460,36 C610,14 720,52 780,30 L780,88 L0,88 Z" fill="#1e4a80" opacity="0.85"/>
+    <path d="M0,60 C150,36 340,70 530,48 C670,30 750,58 780,44 L780,88 L0,88 Z" fill="#2bbfd4" opacity="0.48"/>
+    <path d="M0,68 C180,50 390,76 590,60 C720,48 762,68 780,58 L780,88 L0,88 Z" fill="#1a8fa0" opacity="0.36"/>
+  </svg>
+  <div class="pftr-in">
+    <div class="pte">Transforming<br>Experience</div>
+    <div class="pcerts">
+      <span>ISAPS</span><span>AMCPER</span><span>Consejo Mex. Cir. Plástica</span><span>CONACEM</span><span>CCPER</span>
     </div>
-  </div>`).join('');
-}
+  </div></div>`;
 
-function openPromoForm(idx=null){
-  const p=idx!==null?promos[idx]:{id:'p'+Date.now(),name:'',sub:{es:'',en:''},before:0,promo:0,valid:'',inc:{es:[''],en:['']},notes:{es:'',en:''},bonos:{es:[],en:[]},pkg:false};
-  document.getElementById('pform').innerHTML=`
-    <div class="card" style="border:2px solid var(--tl)">
-      <div class="ctitle">${idx!==null?t('edit'):t('btnNewPromo')}</div>
-      <div class="frow">
-        <div class="fg"><label>Nombre / Name</label><input id="pf_n" value="${p.name}"></div>
-        <div class="fg"><label>Vigencia / Valid</label><input id="pf_v" value="${p.valid}"></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Subtítulo ES</label><input id="pf_ses" value="${p.sub.es}"></div>
-        <div class="fg"><label>Subtitle EN</label><input id="pf_sen" value="${p.sub.en}"></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Precio Antes / Before (USD)</label><input type="number" id="pf_b" value="${p.before}"></div>
-        <div class="fg"><label>Precio Promo / Promo Price (USD)</label><input type="number" id="pf_p" value="${p.promo}"></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Procedimientos ES (uno por línea)</label><textarea id="pf_ies" rows="3">${(p.inc.es||[]).join('\n')}</textarea></div>
-        <div class="fg"><label>Procedures EN (one per line)</label><textarea id="pf_ien" rows="3">${(p.inc.en||[]).join('\n')}</textarea></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Bonos ES</label><textarea id="pf_bes" rows="2">${(p.bonos.es||[]).join('\n')}</textarea></div>
-        <div class="fg"><label>Bonuses EN</label><textarea id="pf_ben" rows="2">${(p.bonos.en||[]).join('\n')}</textarea></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label>Notas ES</label><textarea id="pf_nes" rows="2">${p.notes.es||''}</textarea></div>
-        <div class="fg"><label>Notes EN</label><textarea id="pf_nen" rows="2">${p.notes.en||''}</textarea></div>
-      </div>
-      <label style="font-size:11px;font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:10px">
-        <input type="checkbox" id="pf_pkg"${p.pkg?' checked':''}> Incluye paquete hospitalización / Hospital package included
-      </label>
-      <div style="display:flex;gap:7px">
-        <button class="btn btn-nv" onclick="savePromo(${idx})">${t('save')}</button>
-        <button class="btn btn-out" onclick="document.getElementById('pform').innerHTML=''">${t('cancel')}</button>
-      </div>
-    </div>`;
-  document.getElementById('pform').scrollIntoView({behavior:'smooth'});
-}
+/* ===== HEADER ===== */
+const HDR=`<div class="ph">
+  <img src="https://ciplastic.com/wp-content/uploads/2025/04/cropped-Logo_Footer-1.png-1.webp" height="56"
+       onerror="this.outerHTML='<div style=&quot;font-size:19pt;font-weight:700;color:#1a3a6b&quot;>CIPLASTIC<br><span style=&quot;font-size:7pt;color:#888;letter-spacing:1.5px;font-weight:400&quot;>CERTIFIED PLASTIC SURGERY</span></div>'">
+  <div class="phr-contact">
+    <span style="color:#1a3a6b;font-weight:700">(664) 383 8390</span>&nbsp;<span style="color:#2bbfd4;font-size:7pt;font-weight:700">MEX</span>&nbsp;&#128241;<br>
+    <strong>+1 (619) 798 9836</strong>&nbsp;<span style="color:#2bbfd4;font-size:7pt;font-weight:700">USA</span><br>
+    <span style="color:#2bbfd4">www.ciplastic.com</span>&nbsp;&#127760;<br>
+    Calle 5a. Emiliano Zapata #7867&nbsp;&#128205;<br>
+    Zona Centro. C.P. 22000 Tijuana, Baja California
+  </div></div>
+<hr class="pdivider">`;
 
-async function savePromo(idx){
-  const np={id:idx!==null?promos[idx].id:'p'+Date.now(),
-    name:document.getElementById('pf_n').value,
-    sub:{es:document.getElementById('pf_ses').value,en:document.getElementById('pf_sen').value},
-    before:+document.getElementById('pf_b').value||0,promo:+document.getElementById('pf_p').value||0,
-    valid:document.getElementById('pf_v').value,
-    inc:{es:document.getElementById('pf_ies').value.split('\n').filter(l=>l.trim()),
-         en:document.getElementById('pf_ien').value.split('\n').filter(l=>l.trim())},
-    bonos:{es:document.getElementById('pf_bes').value.split('\n').filter(l=>l.trim()),
-           en:document.getElementById('pf_ben').value.split('\n').filter(l=>l.trim())},
-    notes:{es:document.getElementById('pf_nes').value,en:document.getElementById('pf_nen').value},
-    pkg:document.getElementById('pf_pkg').checked};
-  if(idx!==null)promos[idx]=np; else promos.push(np);
-  try{await window.storage.set('cp_promos',JSON.stringify(promos));}catch(e){}
-  document.getElementById('pform').innerHTML='';
-  renderPromos(); ops.forEach(o=>renderOp(o)); showToast(t('toastSaved'));
-}
-async function delPromo(i){
-  if(!confirm(lang==='es'?'¿Eliminar esta promoción?':'Delete this promotion?'))return;
-  promos.splice(i,1);
-  try{await window.storage.set('cp_promos',JSON.stringify(promos));}catch(e){}
-  renderPromos();
-}
-function showToast(m,bg='#065f46'){const el=document.getElementById('toast');el.textContent=m;el.style.background=bg;el.style.display='block';setTimeout(()=>el.style.display='none',3000);}
+function buildPage(body){return`<div class="pp">${HDR}<div class="pbody">${body}</div>${FTR_SVG}</div>`;}
 
-/* === GOOGLE DOC CREATION === */
-function toBase64UTF8(str){
-  const bytes=new TextEncoder().encode(str);
-  let bin='';for(const b of bytes)bin+=String.fromCharCode(b);
-  return btoa(bin);
-}
-
-function buildDocHTML(pn,pd){
-  const l=lang,tx=T[l];
+/* ===== PDF GENERATION ===== */
+function genPDF(){
+  const pn=$('pn').value.trim();
+  if(!pn){alert(t('noname')||'Por favor ingrese el nombre del paciente.');return;}
+  const pd=$('pd').value;
+  const notes=$('notes').value.trim();
+  const tx=TX[L];
+  const dfmt=pd?new Date(pd+'T12:00:00').toLocaleDateString(L==='es'?'es-MX':'en-US',{day:'2-digit',month:'2-digit',year:'numeric'}):'';
   let total=0;
-  let opsHtml='';
+
+  /* Build ops HTML */
+  let opsH='';
   ops.forEach((op,i)=>{
     let nm,bef,prmo,inc=[],bonos=[],nt='',hasPkg=false;
     if(op.type==='promo'){
-      const p=promos.find(x=>x.id===op.pid);if(!p)return;
-      nm=`${p.name} — ${p.sub[l]}`;bef=p.before;prmo=p.promo;
-      inc=p.inc[l]||[];bonos=p.bonos[l]||[];nt=p.notes[l]||'';hasPkg=p.pkg;total+=prmo;
+      const p=PR.find(x=>x.id===op.pid);if(!p)return;
+      nm=`${p.name}<span style="color:#2bbfd4;font-size:9pt;font-weight:400"> — ${p.sub[L]}</span>`;
+      bef=p.before;prmo=p.promo;inc=p.inc[L]||[];bonos=p.bonos[L]||[];nt=p.notes[L]||'';hasPkg=p.pkg;total+=prmo;
     } else {
-      const r=parseFloat(op.real)||0,d=parseFloat(op.disc)||0,dp=r*(1-d/100);
-      nm=op.name||tx.lblProc;bef=r;prmo=dp;
-      if(op.desc)inc=op.desc.split('\n').filter(x=>x.trim());total+=prmo;
+      const r=parseFloat(op.real)||0,d=parseFloat(op.disc)||0,dp=Math.round(r*(1-d/100));
+      nm=op.name||tx.lpc;bef=r;prmo=dp;if(op.desc)inc=op.desc.split('\n').filter(x=>x.trim());total+=prmo;
     }
-    opsHtml+=`<div style="margin-bottom:14px">
-<p><u><b>${tx.dOpt} ${i+1}</b></u></p>
-<table width="100%"><tr><td><b>${tx.dProc} ${i+1}: ${nm}</b></td>${bef>prmo?`<td align="right"><s style="color:#888">${bef.toLocaleString()} USD</s></td>`:'<td></td>'}</tr></table>
-${bef>prmo?`<p>${tx.dPromo}: &nbsp;<b style="background:#fff8d0;padding:1px 4px">${prmo.toLocaleString('es-MX',{maximumFractionDigits:0})} USD</b></p>`:`<p><b style="color:#1a3a6b;font-size:13pt">${prmo.toLocaleString('es-MX',{maximumFractionDigits:0})} USD</b></p>`}
-${inc.length?`<p><i>${tx.dPkgQ}</i></p>${inc.map(x=>`<p style="color:#2bbfd4;padding-left:12px"><b><i>• ${x}</i></b></p>`).join('')}`:''}
-${bonos.length?`<p><b>${tx.dBonos}:</b> ${bonos.join(', ')}</p>`:''}
-${nt?`<p><b>Nota:</b> ${nt}</p>`:''}
-${hasPkg?`<table border="1" style="border-collapse:collapse;width:100%;margin-top:8px;font-size:9pt"><tr><td colspan="3" style="padding:5px;background:#eef2ff"><b>${tx.dPkgTitle}</b></td></tr><tr>${tx.dPkgItems.slice(0,3).map(x=>`<td style="padding:4px"><i>- ${x}</i></td>`).join('')}</tr><tr>${tx.dPkgItems.slice(3).map(x=>`<td style="padding:4px"><i>- ${x}</i></td>`).join('')}</tr></table>`:''}
-</div>`;
+    opsH+=`<div style="margin-bottom:14px;padding-bottom:13px;${i<ops.length-1?'border-bottom:.5px solid #e2e8f0':''}">
+    <p style="font-size:8.5pt;font-weight:700;text-decoration:underline;color:#1a3a6b;margin-bottom:6px">${tx.dOpt} ${i+1}</p>
+    <table style="width:100%;border-collapse:collapse"><tr>
+      <td style="font-size:10.5pt;font-weight:700">${tx.dProc} ${i+1}: ${nm}</td>
+      ${bef>prmo?`<td style="text-align:right;color:#888;text-decoration:line-through;font-size:9pt;white-space:nowrap">$${bef.toLocaleString()} USD</td>`:'<td></td>'}
+    </tr></table>
+    ${bef>prmo?`<p style="font-size:9.5pt;margin-top:5px">${tx.dPrm}: &nbsp;<span class="pyhl">$${prmo.toLocaleString('es-MX',{maximumFractionDigits:0})} USD</span></p>`:`<p style="font-size:11pt;font-weight:700;color:#1a3a6b;margin-top:4px">$${prmo.toLocaleString('es-MX',{maximumFractionDigits:0})} USD</p>`}
+    ${inc.length?`<p style="font-style:italic;font-size:8.5pt;color:#333;margin:9px 0 3px">${tx.dPQ}</p>${inc.map(x=>`<p style="color:#2bbfd4;font-weight:700;font-style:italic;padding-left:10px;font-size:9pt;margin-bottom:2px">• ${x}</p>`).join('')}`:''}
+    ${bonos.length?`<p style="font-size:9pt;margin-top:5px"><strong>${tx.dInc}:</strong> ${bonos.join(', ')}</p>`:''}
+    ${nt?`<p style="font-size:8pt;margin-top:5px"><strong>Nota:</strong> ${nt}</p>`:''}
+    ${hasPkg?`<div style="border:1px solid #e2e8f0;border-radius:4px;padding:9px 12px;margin-top:10px">
+      <p style="font-size:8pt;font-weight:700;text-decoration:underline;margin-bottom:6px">${tx.dPT}</p>
+      <table style="width:100%;border-collapse:collapse;font-size:7.5pt;font-style:italic">
+        <tr>${tx.PKG.slice(0,3).map(x=>`<td style="padding:2px 4px">- ${x}</td>`).join('')}</tr>
+        <tr>${tx.PKG.slice(3).map(x=>`<td style="padding:2px 4px">- ${x}</td>`).join('')}</tr>
+      </table></div>`:''}
+    </div>`;
   });
-  const notes=document.getElementById('notes').value.trim();
-  const selEx=extras.filter(e=>e.sel);
-  const extrasPage=selEx.length?`<div style="page-break-before:always"><h2 style="color:#2bbfd4">${tx.dExtrasTitle}</h2><p style="color:#666;font-style:italic;font-size:9pt">${tx.dExtrasSub}</p>${selEx.map(e=>`<div style="margin-bottom:13px"><p><b style="color:#2bbfd4"><i>${e.name}${e.sp?': '+(e.id==='rec'?recPrice(e):(e.price||'')):''}  </i></b></p><p style="padding-left:10px;font-size:9pt">${e.full}</p></div>`).join('')}</div>`:'';
-  const hdr=`<table width="100%"><tr><td><h2 style="color:#1a3a6b;margin:0">CIPLASTIC<br><span style="font-size:8pt;font-weight:normal;color:#888">CERTIFIED PLASTIC SURGERY</span></h2></td><td align="right" style="font-size:9pt;color:#444">(664) 383 8390 <b style="color:#2bbfd4">MEX</b><br>+1 (619) 798 9836 <b style="color:#2bbfd4">USA</b><br><span style="color:#2bbfd4">www.ciplastic.com</span><br>Calle 5a. Emiliano Zapata #7867<br>Zona Centro. C.P. 22000 Tijuana, B.C.</td></tr></table><hr style="border:2px solid #1a3a6b;margin:10px 0">`;
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body{font-family:Arial,sans-serif;margin:40px;color:#1a1a2e;font-size:10pt}table{border-collapse:collapse}p{margin:3px 0}</style></head><body>
-${hdr}
-<table width="100%"><tr><td><h2 style="color:#1a3a6b;font-style:italic;margin:0">${tx.dPatient}: <span style="text-transform:uppercase">${pn}</span></h2></td><td align="right"><h3 style="color:#1a3a6b;margin:0">${tx.dDate}: ${pd}</h3></td></tr></table>
-<div style="margin:16px 0">${opsHtml}</div>
-${notes?`<div style="background:#f8f9fa;border-left:3px solid #2bbfd4;padding:7px 11px;margin-bottom:12px;font-size:9pt">Nota: ${notes}</div>`:''}
-<table width="100%" style="border-top:2px solid #1a3a6b;margin-top:10px"><tr><td><b style="color:#2bbfd4;font-size:10pt">${tx.dTotal}:</b></td><td align="right"><b style="color:#1a3a6b;font-size:18pt">${total.toLocaleString('es-MX',{maximumFractionDigits:0})} USD</b></td></tr></table>
-<div style="background:#f8f9fa;border-left:3px solid #1a3a6b;padding:7px 11px;margin:12px 0;font-size:9pt"><b>${tx.dImportant}:</b> ${tx.dImportantText}</div>
-<h3 style="color:#1a3a6b;text-align:center;margin:10px 0 6px">${tx.dSurgTitle}</h3>
-${tx.dSurgItems.map(x=>`<p style="padding-left:14px">&#8226; ${x}</p>`).join('')}
-<div style="margin-top:14px"><p style="color:#1a3a6b;font-weight:bold;font-style:italic;text-decoration:underline">${tx.dZelleTitle}</p>
-<p><b>${tx.dZelleLabels[0]}:</b> ZELLE</p><p><b>${tx.dZelleLabels[1]}:</b> Ciplastic America</p><p><b>${tx.dZelleLabels[2]}:</b> 5596143241</p><p><b>${tx.dZelleLabels[3]}:</b> hospital@ciplastic.com</p><p><b>${tx.dZelleLabels[4]}:</b> $250 USD</p></div>
-${extrasPage}
-<div style="page-break-before:always">${hdr}
-<h3 style="color:#1a3a6b">${tx.dContactTitle}</h3><p style="font-size:9pt">${tx.dContactText}</p>
-<p style="margin-top:8px"><b>Tel:</b></p><p style="padding-left:14px">&#8226; MEX (664) 383 8390</p><p style="padding-left:14px">&#8226; USA +52 (664) 383 6664 / +1 (619) 798 9836</p>
-<p style="margin-top:6px"><b>Email:</b></p><p style="padding-left:14px">&#8226; hospital@ciplastic.com</p>
-<p style="margin-top:6px"><b>URL:</b></p><p style="padding-left:14px">&#8226; www.ciplastic.com</p>
-<p style="margin-top:6px"><b>Instagram:</b></p><p style="padding-left:14px">&#8226; @ciplastic_hermespelayo &nbsp; &#8226; @hermespelayomd</p>
-<p style="margin-top:6px"><b>Facebook:</b></p><p style="padding-left:14px">&#8226; Ciplastic Plastic Surgery and Med Spa</p>
-<p style="text-align:center;font-weight:bold;margin-top:28px;color:#1a3a6b">${tx.dThanks.replace('\n','<br>')}</p></div>
-</body></html>`;
-}
 
-function extractDocUrl(data){
-  for(const item of(data.content||[])){
-    if(item.type==='mcp_tool_result'){
-      const txt=item.content?.[0]?.text||'';
-      try{const j=JSON.parse(txt);if(j.webViewLink)return j.webViewLink;if(j.id)return`https://docs.google.com/document/d/${j.id}/edit`;}catch(e){}
-      const m=txt.match(/https:\/\/docs\.google\.com\/[^\s"'<>]+/);if(m)return m[0];
-    }
-  }
-  const allText=(data.content||[]).filter(i=>i.type==='text').map(i=>i.text).join('\n');
-  const m=allText.match(/https:\/\/docs\.google\.com\/[^\s"'<>]+/);
-  return m?m[0]:null;
-}
+  const notesH=notes?`<div style="border-left:3px solid #2bbfd4;background:#f8f9fa;padding:7px 11px;margin-bottom:12px;font-size:9pt;color:#555;font-style:italic"><strong>Nota:</strong> ${notes}</div>`:'';
 
-async function createGDoc(){
-  const pn=document.getElementById('pname').value.trim();
-  if(!pn){alert(t('errNoName'));return;}
-  const btn=document.getElementById('btn-create');
-  const box=document.getElementById('infoBox');
-  btn.disabled=true; btn.textContent=t('btnCreating');
-  box.style.display='block'; box.style.background='#e8f4fd'; box.style.borderColor='#90cdf4';
-  box.innerHTML='🔄 '+(lang==='es'?'Conectando con Google Drive...':'Connecting to Google Drive...');
-  try{
-    const pd=document.getElementById('pdate').value;
-    const title=`Cotización CIPlastic — ${pn} — ${pd}`;
-    const b64=toBase64UTF8(buildDocHTML(pn,pd));
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',max_tokens:1000,
-        system:'You are a Google Drive file creator. Immediately call create_file with the provided parameters. Return only the webViewLink URL.',
-        messages:[{role:'user',content:`Call create_file: title="${title}", mimeType="text/html", content="${b64}". Return only the webViewLink.`}],
-        mcp_servers:[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'gdrive'}]
-      })
-    });
-    if(!res.ok){const e=await res.text();throw new Error(`HTTP ${res.status}: ${e.substring(0,300)}`);}
-    const data=await res.json();
-    if(data.error)throw new Error(JSON.stringify(data.error));
-    const url=extractDocUrl(data);
-    if(url){
-      box.style.background='#e6f7e6';box.style.borderColor='#68d391';
-      box.innerHTML=`<b style="color:#276749">✅ ${lang==='es'?'¡Documento creado!':'Document created!'}</b><br><a href="${url}" target="_blank" style="color:#1a3a6b;font-weight:700">📄 ${lang==='es'?'Abrir en Google Docs →':'Open in Google Docs →'}</a>`;
-    } else {
-      // Show raw response for debugging
-      const dbg=JSON.stringify(data).substring(0,600);
-      throw new Error('No URL found in response: '+dbg);
-    }
-  }catch(err){
-    box.style.background='#fff0f0';box.style.borderColor='#fc8181';
-    box.innerHTML=`<b style="color:#c53030">❌ Error:</b><br><small style="word-break:break-all">${err.message}</small>`;
-    console.error('GDoc error:',err);
-  }finally{
-    btn.disabled=false;btn.textContent=t('btnCreate');
-  }
+  const p1=`<table style="width:100%;border-collapse:collapse;margin-bottom:16px"><tr>
+    <td><p style="font-size:14pt;font-weight:700;color:#1a3a6b;font-style:italic">${tx.dPat}: <span style="text-transform:uppercase">${pn}</span></p></td>
+    <td style="text-align:right"><p style="font-size:11.5pt;font-weight:700;color:#1a3a6b">${tx.dDate}: ${dfmt}</p></td></tr></table>
+  <div style="margin-bottom:6px">${opsH}</div>
+  ${notesH}
+  <table style="width:100%;border-collapse:collapse;border-top:2px solid #1a3a6b;padding-top:8px;margin:10px 0 12px"><tr>
+    <td><span style="font-size:10.5pt;font-weight:700;color:#2bbfd4">${tx.dTot}:</span></td>
+    <td style="text-align:right"><span style="font-size:22pt;font-weight:700;color:#1a3a6b">$&nbsp;${Math.round(total).toLocaleString('es-MX',{maximumFractionDigits:0})} USD</span></td></tr></table>
+  <div class="pibox"><strong>${tx.dI}:</strong> ${tx.dIT}</div>
+  <p style="font-size:11.5pt;font-weight:700;font-style:italic;color:#1a3a6b;text-align:center;margin:12px 0 7px">${tx.dST}</p>
+  ${tx.SURG.map(x=>`<p style="padding-left:16px;font-size:9pt;margin-bottom:2px">&#8226; ${x}</p>`).join('')}
+  <div class="pzti">${tx.dZT}</div>
+  <p style="font-style:italic;font-size:9pt;line-height:2">
+    <strong>${tx.ZL[0]}:</strong> ZELLE<br>
+    <strong>${tx.ZL[1]}:</strong> Ciplastic America<br>
+    <strong>${tx.ZL[2]}:</strong> 5596143241<br>
+    <strong>${tx.ZL[3]}:</strong> hospital@ciplastic.com<br>
+    <strong>${tx.ZL[4]}:</strong> $250 USD</p>`;
+
+  const selEx=EX.filter(e=>e.sel);
+  const p2=selEx.length?`<h2 style="color:#1a3a6b;font-size:13pt;margin-bottom:5px">${tx.dET}</h2>
+  <p style="font-size:8pt;color:#666;font-style:italic;margin-bottom:18px">${tx.dES}</p>
+  ${selEx.map(e=>`<div style="margin-bottom:15px"><p style="color:#2bbfd4;font-weight:700;font-style:italic;font-size:9.5pt">${e.n}${e.sp?(': '+(e.id==='rec'?rPrc(e):e.pr)):''}</p><p style="font-size:8.5pt;color:#444;padding-left:8px;margin-top:5px;line-height:1.6">${e.fu}</p></div>`).join('')}`:'';
+
+  const p3=`<h3 style="color:#1a3a6b;font-size:12pt;margin-bottom:8px">${tx.dCT}</h3>
+  <p style="font-size:9pt;color:#555;margin-bottom:16px">${tx.dCC}</p>
+  <p style="font-weight:700;font-size:9.5pt;margin-top:10px">Tel:</p>
+  <p style="padding-left:16px;font-size:9.5pt">&#8226; MEX (664) 383 8390</p>
+  <p style="padding-left:16px;font-size:9.5pt">&#8226; USA +52 (664) 383 6664 / +1 (619) 798 9836</p>
+  <p style="font-weight:700;font-size:9.5pt;margin-top:10px">Email:</p>
+  <p style="padding-left:16px;font-size:9.5pt">&#8226; hospital@ciplastic.com</p>
+  <p style="font-weight:700;font-size:9.5pt;margin-top:10px">URL:</p>
+  <p style="padding-left:16px;font-size:9.5pt">&#8226; www.ciplastic.com</p>
+  <p style="font-weight:700;font-size:9.5pt;margin-top:10px">Instagram:</p>
+  <p style="padding-left:16px;font-size:9.5pt">&#8226; @ciplastic_hermespelayo &nbsp; &#8226; @hermespelayomd</p>
+  <p style="font-weight:700;font-size:9.5pt;margin-top:10px">Facebook:</p>
+  <p style="padding-left:16px;font-size:9.5pt">&#8226; Ciplastic Plastic Surgery and Med Spa</p>
+  <p style="text-align:center;font-weight:700;color:#1a3a6b;margin-top:36px;font-size:10.5pt">${tx.dTk.replace('\n','<br>')}</p>`;
+
+  /* Render to print area then print */
+  $('printArea').innerHTML=buildPage(p1)+(p2?buildPage(p2):'')+buildPage(p3);
+  setTimeout(()=>window.print(),400);
 }
 
 init();
