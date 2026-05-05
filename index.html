@@ -74,18 +74,19 @@ input[type=checkbox]{accent-color:var(--nv);width:15px;height:15px;cursor:pointe
   .pp:last-child{page-break-after:auto}
 }
 #printArea{display:none}
-.pp{background:#fff;width:8.5in;min-height:11in;padding:.45in .6in;display:flex;flex-direction:column;font-family:Arial,sans-serif;font-size:10.5pt;color:#1a1a2e;box-sizing:border-box}
+.pp{background:#fff;width:8.5in;height:11in;padding:.42in .6in 0 .6in;display:flex;flex-direction:column;font-family:Arial,sans-serif;font-size:10.5pt;color:#1a1a2e;box-sizing:border-box;overflow:hidden}
 .ph{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.pdivider{border:none;border-top:2px solid #1a3a6b;margin:0 0 14px}
+.pdivider{border:none;border-top:2px solid #1a3a6b;margin:0 0 13px}
 .pyhl{background:#fff8d0;padding:1px 5px;font-weight:bold;font-size:11pt}
 .pibox{border-left:3px solid #1a3a6b;background:#f8f9fa;padding:8px 12px;margin:12px 0;font-size:9pt}
 .pzti{color:#1a3a6b;font-weight:bold;font-style:italic;text-decoration:underline;font-size:9.5pt;margin:13px 0 5px}
-/* Footer height & layout */
-.pftr{position:relative;height:108px;margin-top:auto}
+.pbody{flex:1 1 auto;overflow:hidden}
+/* Footer */
+.pftr{flex:0 0 108px;position:relative;width:100%}
 .pftr svg{position:absolute;top:0;left:0;width:100%;height:100%}
-.pftr-in{position:absolute;bottom:8px;left:18px;right:14px;display:flex;justify-content:space-between;align-items:flex-end}
-.pte{color:#fff;font-family:Georgia,serif;font-style:italic;font-size:13pt;line-height:1.2}
-.pcerts{display:flex;gap:10px;align-items:flex-end;flex-wrap:nowrap}
+.pftr-in{position:absolute;bottom:9px;left:18px;right:14px;display:flex;justify-content:space-between;align-items:flex-end}
+.pte{color:#fff;font-family:Georgia,serif;font-style:italic;font-size:12.5pt;line-height:1.2}
+.pcerts{display:flex;gap:9px;align-items:flex-end}
 </style>
 </head>
 <body>
@@ -583,7 +584,7 @@ const HDR=`<div class="ph">
   </div></div>
 <hr class="pdivider">`;
 
-function mkPage(body){return`<div class="pp">${HDR}<div class="pbody">${body}</div>${FTR}</div>`;}
+function mkPage(body){return`<div class="pp">${HDR}<div class="pbody" style="flex:1 1 auto;overflow:hidden">${body}</div>${FTR}</div>`;}
 
 function genPDF(){
   const pn=$('pn').value.trim();
