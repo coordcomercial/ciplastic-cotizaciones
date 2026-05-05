@@ -48,6 +48,11 @@ body{font-family:Arial,sans-serif;background:var(--gr);color:var(--tx);font-size
 .disc-badge{background:#e8a000;color:#fff;border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700;margin-left:6px}
 .bpdf{width:100%;padding:13px;background:var(--tl);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:8px}
 .bpdf:hover{background:#1a8fa0}
+.advisor-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.av-btn{padding:8px 18px;border:2px solid var(--bd);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:700;color:var(--lt);transition:all .15s}
+.av-btn.on{border-color:var(--nv);background:var(--nv);color:#fff}
+.folio-badge{display:inline-block;background:var(--gr);border:1.5px solid var(--bd);border-radius:6px;padding:5px 13px;font-size:12px;font-weight:700;color:var(--nv);letter-spacing:.5px}
+.validity-note{background:#e8f4fd;border:1px solid #90cdf4;border-radius:6px;padding:8px 12px;font-size:11px;color:#2b6cb0;margin-top:8px}
 .bsm{border:1.5px solid var(--bd);background:transparent;padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px}
 .bdel{background:#fff0f0;color:#c53030;border:1px solid #fecaca;padding:3px 8px;border-radius:5px;cursor:pointer;font-size:10px}
 input[type=checkbox]{accent-color:var(--nv);width:15px;height:15px;cursor:pointer;flex-shrink:0}
@@ -75,12 +80,12 @@ input[type=checkbox]{accent-color:var(--nv);width:15px;height:15px;cursor:pointe
 .pyhl{background:#fff8d0;padding:1px 5px;font-weight:bold;font-size:11pt}
 .pibox{border-left:3px solid #1a3a6b;background:#f8f9fa;padding:8px 12px;margin:12px 0;font-size:9pt}
 .pzti{color:#1a3a6b;font-weight:bold;font-style:italic;text-decoration:underline;font-size:9.5pt;margin:13px 0 5px}
-.pftr{position:relative;height:88px;margin-top:auto}
+/* Footer height & layout */
+.pftr{position:relative;height:108px;margin-top:auto}
 .pftr svg{position:absolute;top:0;left:0;width:100%;height:100%}
-.pftr-in{position:absolute;bottom:10px;left:18px;right:16px;display:flex;justify-content:space-between;align-items:flex-end}
-.pte{color:#fff;font-family:Georgia,serif;font-style:italic;font-size:14pt;line-height:1.2}
-.pcerts{display:flex;gap:13px;align-items:flex-end}
-.pcerts span{color:rgba(255,255,255,.65);font-size:6.5pt;font-weight:bold;text-align:center;max-width:50px;line-height:1.3}
+.pftr-in{position:absolute;bottom:8px;left:18px;right:14px;display:flex;justify-content:space-between;align-items:flex-end}
+.pte{color:#fff;font-family:Georgia,serif;font-style:italic;font-size:13pt;line-height:1.2}
+.pcerts{display:flex;gap:10px;align-items:flex-end;flex-wrap:nowrap}
 </style>
 </head>
 <body>
@@ -122,6 +127,25 @@ input[type=checkbox]{accent-color:var(--nv);width:15px;height:15px;cursor:pointe
   <div class="totb">
     <div><div style="font-size:11px;opacity:.7" id="lt">TOTAL COTIZACIÓN</div><div style="font-size:9px;opacity:.4;margin-top:1px">Extras no incluidos en el total</div></div>
     <div id="td" style="font-size:22px;font-weight:700">$0 USD</div>
+  </div>
+  <!-- ADVISOR + FOLIO -->
+  <div class="card">
+    <div class="ct">Asesor que cotiza</div>
+    <div class="fg"><label>Seleccionar asesor <span style="color:#e53e3e">*</span> (requerido)</label>
+      <div class="advisor-row" id="advisorRow">
+        <button class="av-btn" onclick="selAdv('GA')">GA</button>
+        <button class="av-btn" onclick="selAdv('MM')">MM</button>
+        <button class="av-btn" onclick="selAdv('VR')">VR</button>
+        <button class="av-btn" onclick="selAdv('JR')">JR</button>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+      <div class="fg" style="margin-bottom:0;flex:1">
+        <label>Folio de cotización</label>
+        <div class="folio-badge" id="folioDisplay">—</div>
+      </div>
+    </div>
+    <div class="validity-note" id="validityNote"></div>
   </div>
   <button class="bpdf" id="bpdf" onclick="genPDF()">🖨  Generar PDF</button>
 </div>
@@ -241,9 +265,51 @@ const EXTRAS_EN=[
   {id:'rec',n:'Nights of hospitalization',pb:200,pc:60,sh:'Professional care, meals, Smart TV, Wi-Fi, A/C.',fu:'Nights of hospitalization with professional nursing care. Includes: proper nutrition, healthy snacks, Smart TV, Wi-Fi, phone, air conditioning/heating.'}
 ];
 
-let L='es', oc=0, ops=[], EX=[], PR=[...DP];
+let L='es', oc=0, ops=[], EX=[], PR=[...DP], ADVISOR='';
 const $=id=>document.getElementById(id);
-const rPrc=e=>{const n=e.nights||1,c=e.companion||false;return`$${n*200+(c?n*60:0)} USD`;};
+const rPrc=e=>{const n=e.nights||1,c=e.companion||false;return`${n*200+(c?n*60:0)} USD`;};
+
+/* ---- FOLIO ---- */
+function getFolioDate(){
+  const d=new Date();
+  return`${d.getDate()}${d.getMonth()+1}${String(d.getFullYear()).slice(-2)}`;
+}
+function getNextFolio(){
+  const dateStr=getFolioDate();
+  let data={date:'',count:0};
+  try{const s=localStorage.getItem('cp_folio');if(s)data=JSON.parse(s);}catch(e){}
+  if(data.date!==dateStr)data={date:dateStr,count:0};
+  data.count++;
+  try{localStorage.setItem('cp_folio',JSON.stringify(data));}catch(e){}
+  return`CP${dateStr}-${String(data.count).padStart(3,'0')}`;
+}
+function previewFolio(){
+  const dateStr=getFolioDate();
+  let data={date:'',count:0};
+  try{const s=localStorage.getItem('cp_folio');if(s)data=JSON.parse(s);}catch(e){}
+  if(data.date!==dateStr)data={date:dateStr,count:0};
+  return`CP${dateStr}-${String(data.count+1).padStart(3,'0')}`;
+}
+function getValidityText(){
+  const d=new Date();
+  const months_es=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const months_en=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const m=L==='es'?months_es[d.getMonth()]:months_en[d.getMonth()];
+  return L==='es'
+    ?`Esta cotización tiene validez durante el mes de ${m} ${d.getFullYear()}.`
+    :`This quote is valid during the month of ${m} ${d.getFullYear()}.`;
+}
+
+/* ---- ADVISOR ---- */
+function selAdv(a){
+  ADVISOR=a;
+  document.querySelectorAll('.av-btn').forEach(b=>b.classList.toggle('on',b.textContent===a));
+  updateFolioDisplay();
+}
+function updateFolioDisplay(){
+  const fd=$('folioDisplay');if(fd)fd.textContent=ADVISOR?previewFolio():'— (selecciona asesor)';
+  const vn=$('validityNote');if(vn)vn.textContent=getValidityText();
+}
 
 function loadSaved(){try{const s=localStorage.getItem('cp_promos_v4');if(s)PR=JSON.parse(s);}catch(e){}}
 function savePromos(){try{localStorage.setItem('cp_promos_v4',JSON.stringify(PR));}catch(e){}}
@@ -281,7 +347,7 @@ function isGoldenRuleActive(){return ops.filter(o=>o.type==='catalog'||o.type===
 function init(){
   loadSaved();
   $('pd').value=new Date().toISOString().split('T')[0];
-  iEX();addOp();rEX();rPR();calc();
+  iEX();addOp();rEX();rPR();calc();updateFolioDisplay();
 }
 
 function addOp(){oc++;const op={id:oc,type:'promo',pid:PR[0]?.id||'',plName:'',name:'',real:'',disc:'',desc:''};ops.push(op);rOp(op);calc();}
@@ -486,15 +552,23 @@ function dPR(i){if(!confirm('¿Eliminar esta promoción?'))return;PR.splice(i,1)
 
 /* ===== PDF ===== */
 const FTR=`<div class="pftr">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 88" preserveAspectRatio="none">
-    <rect width="780" height="88" fill="#1a3a6b"/>
-    <path d="M0,52 C120,24 280,64 460,36 C610,14 720,52 780,30 L780,88 L0,88 Z" fill="#1e4a80" opacity="0.85"/>
-    <path d="M0,60 C150,36 340,70 530,48 C670,30 750,58 780,44 L780,88 L0,88 Z" fill="#2bbfd4" opacity="0.48"/>
-    <path d="M0,68 C180,50 390,76 590,60 C720,48 762,68 780,58 L780,88 L0,88 Z" fill="#1a8fa0" opacity="0.36"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 108" preserveAspectRatio="none">
+    <rect width="780" height="108" fill="#1a3a6b"/>
+    <path d="M0,52 C120,24 280,64 460,36 C610,14 720,52 780,30 L780,108 L0,108 Z" fill="#1e4a80" opacity="0.85"/>
+    <path d="M0,62 C150,36 340,72 530,50 C670,30 750,60 780,46 L780,108 L0,108 Z" fill="#2bbfd4" opacity="0.45"/>
+    <path d="M0,72 C180,54 390,78 590,63 C720,52 762,70 780,62 L780,108 L0,108 Z" fill="#1a8fa0" opacity="0.32"/>
   </svg>
   <div class="pftr-in">
     <div class="pte">Transforming<br>Experience</div>
-    <div class="pcerts"><span>ISAPS</span><span>AMCPER</span><span>Consejo Mex. Cir. Plástica</span><span>CONACEM</span><span>CCPER</span></div>
+    <div class="pcerts">
+      <div style="text-align:center"><div style="font-size:6pt;font-weight:700;color:rgba(255,255,255,.85)">ISAPS</div><div style="font-size:5pt;color:rgba(255,255,255,.5);max-width:48px;line-height:1.3;margin-top:1px">International Society of Aesthetic Plastic Surgery</div></div>
+      <div style="text-align:center"><div style="font-size:6pt;font-weight:700;color:rgba(255,255,255,.85)">AMCPER</div><div style="font-size:5pt;color:rgba(255,255,255,.5);max-width:52px;line-height:1.3;margin-top:1px">Asoc. Mexicana de Cirugía Plástica</div></div>
+      <div style="text-align:center"><div style="font-size:5.5pt;font-weight:700;color:rgba(255,255,255,.85);max-width:52px;line-height:1.3">Academia Nacional de Medicina</div></div>
+      <div style="text-align:center"><div style="font-size:6pt;font-weight:700;color:rgba(255,255,255,.85)">CONACEM</div></div>
+      <div style="text-align:center"><div style="font-size:5.5pt;font-weight:700;color:rgba(255,255,255,.85);max-width:52px;line-height:1.3">Academia Mexicana de Cirugía</div></div>
+      <div style="text-align:center"><div style="font-size:5pt;font-weight:700;color:rgba(255,255,255,.85);max-width:56px;line-height:1.3">Consejo Mexicano de Cir. Plástica Estética y Reconstructiva A.C.</div></div>
+      <div style="text-align:center"><div style="font-size:5pt;font-weight:700;color:rgba(255,255,255,.85);max-width:52px;line-height:1.3">American Society of Plastic Surgeons</div></div>
+    </div>
   </div></div>`;
 
 const HDR=`<div class="ph">
@@ -514,7 +588,10 @@ function mkPage(body){return`<div class="pp">${HDR}<div class="pbody">${body}</d
 function genPDF(){
   const pn=$('pn').value.trim();
   if(!pn){alert('Por favor ingrese el nombre del paciente.');return;}
-  const pd=$('pd').value;
+  if(!ADVISOR){alert('Por favor selecciona el asesor que realiza la cotización.');return;}
+  const folio=getNextFolio();
+  updateFolioDisplay();
+  const validityTxt=getValidityText();  const pd=$('pd').value;
   const notes=$('notes').value.trim();
   const showPct=$('showDiscPct').checked;
   const dfmt=pd?new Date(pd+'T12:00:00').toLocaleDateString(L==='es'?'es-MX':'en-US',{day:'2-digit',month:'2-digit',year:'numeric'}):'';
@@ -584,7 +661,11 @@ function genPDF(){
 
   const p1=`<table style="width:100%;border-collapse:collapse;margin-bottom:16px"><tr>
     <td><p style="font-size:14pt;font-weight:700;color:#1a3a6b;font-style:italic">${L==='es'?'Nombre del paciente':'Patient name'}: <span style="text-transform:uppercase">${pn}</span></p></td>
-    <td style="text-align:right"><p style="font-size:11.5pt;font-weight:700;color:#1a3a6b">${L==='es'?'Fecha':'Date'}: ${dfmt}</p></td></tr></table>
+    <td style="text-align:right">
+      <p style="font-size:11.5pt;font-weight:700;color:#1a3a6b">${L==='es'?'Fecha':'Date'}: ${dfmt}</p>
+      <p style="font-size:9pt;color:#555;margin-top:3px">${L==='es'?'Folio':'Quote #'}: <strong style="color:#1a3a6b">${folio}</strong> &nbsp;|&nbsp; ${L==='es'?'Asesor':'Advisor'}: <strong style="color:#1a3a6b">${ADVISOR}</strong></p>
+    </td></tr></table>
+  <div style="background:#e8f4fd;border:1px solid #90cdf4;border-radius:4px;padding:5px 10px;margin-bottom:14px;font-size:8.5pt;color:#2b6cb0">&#128197; ${validityTxt}</div>
   <div style="margin-bottom:6px">${opsH}</div>${notesH}
   <table style="width:100%;border-collapse:collapse;border-top:2px solid #1a3a6b;padding-top:8px;margin:10px 0 12px"><tr>
     <td><span style="font-size:10.5pt;font-weight:700;color:#2bbfd4">${L==='es'?'TOTAL 2026':'TOTAL 2026'}:</span></td>
