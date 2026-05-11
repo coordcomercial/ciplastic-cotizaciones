@@ -322,25 +322,33 @@ function addonFinalPrice(a){
   return dt==='fixed'?Math.max(0,r-d):Math.round(r*(1-d/100));
 }
 function renderAddon(opId,a,idx){
-  const key=`${opId}-${a.aid}`;
+  const key=opId+'-'+a.aid;
   const plEntry=PRICELIST.find(x=>x.name===a.plName);
   const plPrice=plEntry?plEntry.price:0;
   const fp=addonFinalPrice(a);
   const hasDisc=(parseFloat(a.disc)||0)>0;
-  return`<div data-akey="${key}" style="background:var(--gr);border-radius:6px;padding:10px;margin-bottom:6px;border-left:3px solid var(--tl)">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <span style="font-size:10px;font-weight:700;color:var(--tl)">+ Procedimiento ${idx+1}</span>
-      <button class="bdel" onclick="rmAddon(${opId},${a.aid})">✕</button>
-    </div>
-    <div class="tgl" style="margin-bottom:6px">
-      <button class="tb${a.type==='catalog'?' on':''}" onclick="sAT(${opId},${a.aid},'catalog')" style="font-size:10px;padding:3px 8px">📋 Lista</button>
-      <button class="tb${a.type==='manual'?' on':''}" onclick="sAT(${opId},${a.aid},'manual')" style="font-size:10px;padding:3px 8px">✏️ Manual</button>
-    </div>
-    ${a.type==='catalog'?`<div class="fg" style="margin-bottom:4px"><div class="srch"><input class="srch-inp" placeholder="Buscar procedimiento..." value="${a.plName?a.plName+' — $'+plPrice.toLocaleString()+' USD':''}" onfocus="openASearch(${opId},${a.aid})" style="font-size:11px;padding:5px 8px"></div></div>
-    ${plPrice>0?`<div style="display:flex;gap:6px;align-items:center;margin-top:4px"><div class="fg" style="margin-bottom:0;flex:1"><label style="font-size:9px">Descuento</label><div style="display:flex;gap:3px"><select style="width:50px;padding:3px;border:1.5px solid var(--bd);border-radius:4px;font-size:10px" onchange="sAF(${opId},${a.aid},'discType',this.value);rOp(ops.find(o=>o.id===${opId}));calcOnly()"><option value="pct"${(a.discType||'pct')==='pct'?' selected':''}>%</option><option value="fixed"${a.discType==='fixed'?' selected':''}>$</option></select><input type="number" value="${a.disc||''}" placeholder="0" min="0" style="width:55px;padding:3px 5px;border:1.5px solid var(--bd);border-radius:4px;font-size:11px" oninput="sAF(${opId},${a.aid},'disc',this.value);calcOnly()"></div></div><div style="text-align:right;font-size:11px;font-weight:700;color:var(--nv)">${hasDisc?'<s style=\\'opacity:.5\\'>$'+plPrice.toLocaleString()+'</s> → ':''}$${fp.toLocaleString()} USD</div></div>`:''}`:
-    `<div class="r2" style="gap:6px"><div class="fg" style="margin-bottom:0"><label style="font-size:9px">Nombre</label><input value="${a.name||''}" oninput="sAF(${opId},${a.aid},'name',this.value)" style="font-size:11px;padding:5px 8px"></div><div class="fg" style="margin-bottom:0"><label style="font-size:9px">Precio USD</label><input type="number" value="${a.real||''}" placeholder="0" oninput="sAF(${opId},${a.aid},'real',this.value);calcOnly()" style="font-size:11px;padding:5px 8px"></div></div>
-    <div style="display:flex;gap:6px;align-items:center;margin-top:4px"><div class="fg" style="margin-bottom:0;flex:1"><label style="font-size:9px">Descuento</label><div style="display:flex;gap:3px"><select style="width:50px;padding:3px;border:1.5px solid var(--bd);border-radius:4px;font-size:10px" onchange="sAF(${opId},${a.aid},'discType',this.value);rOp(ops.find(o=>o.id===${opId}));calcOnly()"><option value="pct"${(a.discType||'pct')==='pct'?' selected':''}>%</option><option value="fixed"${a.discType==='fixed'?' selected':''}>$</option></select><input type="number" value="${a.disc||''}" placeholder="0" min="0" style="width:55px;padding:3px 5px;border:1.5px solid var(--bd);border-radius:4px;font-size:11px" oninput="sAF(${opId},${a.aid},'disc',this.value);calcOnly()"></div></div>${(parseFloat(a.real)||0)>0?`<div style="text-align:right;font-size:11px;font-weight:700;color:var(--nv)">${hasDisc?'<s style=\\'opacity:.5\\'>$'+(parseFloat(a.real)||0).toLocaleString()+'</s> → ':''}$${fp.toLocaleString()} USD</div>`:''}</div>`}
-  </div>`;
+  const discSel='<select style="width:50px;padding:3px;border:1.5px solid var(--bd);border-radius:4px;font-size:10px" onchange="sAF('+opId+','+a.aid+',\'discType\',this.value);rOp(ops.find(o=>o.id==='+opId+'));calcOnly()"><option value="pct"'+((a.discType||'pct')==='pct'?' selected':'')+'>%</option><option value="fixed"'+(a.discType==='fixed'?' selected':'')+'>$</option></select>';
+  const discInp='<input type="number" value="'+(a.disc||'')+'" placeholder="0" min="0" style="width:55px;padding:3px 5px;border:1.5px solid var(--bd);border-radius:4px;font-size:11px" oninput="sAF('+opId+','+a.aid+',\'disc\',this.value);calcOnly()">';
+  const strikeP=hasDisc?'<s style="opacity:.5">$'+plPrice.toLocaleString()+'</s> → ':'';
+  const strikeR=hasDisc?'<s style="opacity:.5">$'+(parseFloat(a.real)||0).toLocaleString()+'</s> → ':'';
+  const priceDisp='<div style="text-align:right;font-size:11px;font-weight:700;color:var(--nv)">'+strikeP+'$'+fp.toLocaleString()+' USD</div>';
+  const priceDispM='<div style="text-align:right;font-size:11px;font-weight:700;color:var(--nv)">'+strikeR+'$'+fp.toLocaleString()+' USD</div>';
+
+  let h='<div data-akey="'+key+'" style="background:var(--gr);border-radius:6px;padding:10px;margin-bottom:6px;border-left:3px solid var(--tl)">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:10px;font-weight:700;color:var(--tl)">+ Procedimiento '+(idx+1)+'</span><button class="bdel" onclick="rmAddon('+opId+','+a.aid+')">✕</button></div>';
+  h+='<div class="tgl" style="margin-bottom:6px"><button class="tb'+(a.type==='catalog'?' on':'')+'" onclick="sAT('+opId+','+a.aid+',\'catalog\')" style="font-size:10px;padding:3px 8px">📋 Lista</button><button class="tb'+(a.type==='manual'?' on':'')+'" onclick="sAT('+opId+','+a.aid+',\'manual\')" style="font-size:10px;padding:3px 8px">✏️ Manual</button></div>';
+
+  if(a.type==='catalog'){
+    h+='<div class="fg" style="margin-bottom:4px"><div class="srch"><input class="srch-inp" placeholder="Buscar procedimiento..." value="'+(a.plName?a.plName+' — $'+plPrice.toLocaleString()+' USD':'')+'" onfocus="openASearch('+opId+','+a.aid+')" style="font-size:11px;padding:5px 8px"></div></div>';
+    if(plPrice>0){
+      h+='<div style="display:flex;gap:6px;align-items:center;margin-top:4px"><div class="fg" style="margin-bottom:0;flex:1"><label style="font-size:9px">Descuento</label><div style="display:flex;gap:3px">'+discSel+discInp+'</div></div>'+priceDisp+'</div>';
+    }
+  }else{
+    h+='<div class="r2" style="gap:6px"><div class="fg" style="margin-bottom:0"><label style="font-size:9px">Nombre</label><input value="'+(a.name||'')+'" oninput="sAF('+opId+','+a.aid+',\'name\',this.value)" style="font-size:11px;padding:5px 8px"></div><div class="fg" style="margin-bottom:0"><label style="font-size:9px">Precio USD</label><input type="number" value="'+(a.real||'')+'" placeholder="0" oninput="sAF('+opId+','+a.aid+',\'real\',this.value);calcOnly()" style="font-size:11px;padding:5px 8px"></div></div>';
+    h+='<div style="display:flex;gap:6px;align-items:center;margin-top:4px"><div class="fg" style="margin-bottom:0;flex:1"><label style="font-size:9px">Descuento</label><div style="display:flex;gap:3px">'+discSel+discInp+'</div></div>'+((parseFloat(a.real)||0)>0?priceDispM:'')+'</div>';
+  }
+  h+='</div>';
+  return h;
 }
 
 function calcOnly(){
